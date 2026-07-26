@@ -1,0 +1,61 @@
+<?php
+
+return [
+    'common'=>['home'=>'Bosh sahifa','products'=>'Mahsulotlar','articles'=>'Maqolalar','certificates'=>'Sertifikatlar','company_facts'=>'Kompaniya faktlari','faq_title'=>'Ko‘p so‘raladigan savollar','skip_to_content'=>'Kontentga o‘tish','menu_open'=>'Menyuni ochish','menu_close'=>'Menyuni yopish'],
+    'footer'=>[
+        'brand_description'=>'NEO-LABS — Toshkentda biologik faol qo‘shimchalar ishlab chiqaruvchi va kontrakt ishlab chiqarish xizmatlarini ko‘rsatuvchi kompaniya.',
+        'contact_title'=>'Aloqa',
+        'phone_label'=>'Telefon',
+        'email_label'=>'Email',
+        'hours_label'=>'Ish vaqti',
+        'hours_value'=>'09:00–18:00, Du–Sh',
+        'address_title'=>'Manzil',
+        'address_value'=>'O‘zbekiston, Toshkent shahri, Sergeli tumani',
+        'view_map'=>'Xaritada ko‘rish',
+        'navigation_title'=>'Navigatsiya',
+        'navigation_aria'=>'Footer navigatsiyasi',
+    ],
+    'home'=>[
+        'heading_start'=>'Har bir','heading_accent'=>'inson uchun','heading_end'=>"sog'lom hayot",'description'=>"Siz o'zingizni sog'lom his qilishingiz uchun bor imkoniyatni ishga solamiz va uzoq umr kechirishingizga yordam beramiz.",'image_alt'=>'Baxtli oila','directions_title'=>'BFQ vositalari nimaga yordam beradi?','directions_text'=>"Buyrak, oshqozon, bo'g'inlar, miya, immunitet va temir darajasi — organizmingiz uchun kompleks qo'llab-quvvatlash",
+        'faq'=>[
+            ['question'=>'NEO-LABS nimalar ishlab chiqaradi?','answer'=>'NEO-LABS tabletka, kapsula, flakon va sache shaklidagi biologik faol qo‘shimchalarni ishlab chiqaradi.'],
+            ['question'=>'NEO-LABS kontrakt ishlab chiqarish xizmatini ko‘rsatadimi?','answer'=>'Ha. Kompaniya mahsulot formatini muhokama qilishdan qadoqlashgacha bo‘lgan kontrakt ishlab chiqarish so‘rovlarini qabul qiladi.'],
+            ['question'=>'NEO-LABS mahsulotlari qayerda ishlab chiqariladi?','answer'=>'Saytda e’lon qilingan ma’lumotga ko‘ra, ishlab chiqarish O‘zbekiston, Toshkent shahri, Sergeli tumanida joylashgan.'],
+            ['question'=>'Kompaniya bilan qanday bog‘lanish mumkin?','answer'=>'Telefon: +998 99 101 88 39. Email: neo_labs2019@mail.ru. Saytdagi aloqa shaklidan ham foydalanish mumkin.'],
+        ],
+    ],
+    'about'=>[
+        'title'=>'NEO-LABS kompaniyasi haqida','legal_name_display'=>'«NEO‑LABS» MChJ','production_site_alt'=>'NEO-LABS ishlab chiqarish hududi','production_process_alt'=>'NEO-LABS ishlab chiqarish jarayoni','packaging_line_alt'=>'NEO-LABS qadoqlash liniyasi','equipment_alt'=>'NEO-LABS ishlab chiqarish uskunalari','transparency_title'=>'Tasdiqlangan ma’lumotlar va ochiqlik','transparency_text'=>'Sertifikatlar, rahbariyat, xodimlar soni, hamkorlik va kompaniya natijalari faqat administrator tasdiqlovchi manba bilan e’lon qilganidan keyin ko‘rsatiladi.','check_certificates'=>'Sertifikatlarni tekshirish','company_facts'=>'Kompaniya faktlari',
+        'faq'=>[
+            ['question'=>'NEO-LABS qanday kompaniya?','answer'=>'NEO-LABS — Toshkentda biologik faol qo‘shimchalar ishlab chiqaruvchi va kontrakt ishlab chiqarish xizmatlarini ko‘rsatuvchi kompaniya.'],
+            ['question'=>'NEO-LABS qachon tashkil etilgan?','answer'=>'Saytda e’lon qilingan ma’lumotga ko‘ra, korxona 2020-yil 25-iyunda tashkil etilgan.'],
+            ['question'=>'NEO-LABS qayerda joylashgan?','answer'=>'Kompaniya O‘zbekiston, Toshkent shahri, Sergeli tumanida joylashgan. Aniq ko‘cha manzili tasdiqlangach e’lon qilinadi.'],
+        ],
+    ],
+    'production'=>[
+        'title'=>'NEO-LABS ishlab chiqarishi','description'=>'NEO-LABS ishlab chiqarish formatlari, qadoqlash liniyalari, yillik quvvat va kontrakt ishlab chiqarish jarayoni.','capacity_title'=>'Yillik ishlab chiqarish quvvati','capacities'=>['100 mln tabletka','65 mln kapsula','30 mln flakon','4,5 mln sache paket'],'lines_title'=>'Liniyalar va qadoqlash','lines_text'=>'Saytda e’lon qilingan uskunalar imkoniyatlariga PVC/Alu va perforatsiyali Alu-Alu blisterlar, tabletkalar va kapsulalarni bankalarga sanab qadoqlash, kukun va granulalarni sache paketlarga qadoqlash kiradi.','storage_title'=>'Saqlash va nazorat','storage_text'=>'Saytda e’lon qilingan ma’lumotga ko‘ra, xomashyo, qadoqlash materiallari va tayyor mahsulotlar omborlarda saqlanadi; saqlash sharoitlari termoelektron gigrometrlar bilan nazorat qilinadi hamda ventilyatsiya va konditsioner tizimlari yordamida saqlanadi.','process_title'=>'Kontrakt ishlab chiqarish jarayoni','process'=>['Texnik topshiriq va mahsulot formatini muhokama qilish.','Ishlab chiqarish va qadoqlash imkoniyatlarini baholash.','Shartlar, hajm va muddatlarni hujjatlarda kelishish.','Kelishilgan texnik hujjatlar asosida ishlab chiqarish va qadoqlash.'],'request'=>'Ishlab chiqarish bo‘yicha so‘rov yuborish','notice'=>'Laboratoriya tarkibi, aniq minimal buyurtma va qo‘shimcha uskunalar haqidagi ma’lumotlar tasdiqlovchi hujjat yoki administrator yozuvisiz e’lon qilinmaydi.',
+        'faq'=>[
+            ['question'=>'NEO-LABS qanday shakldagi mahsulotlarni ishlab chiqaradi?','answer'=>'Saytda e’lon qilingan imkoniyatlarga tabletka, qattiq kapsula, flakon va 1–35 grammli sache qadoqlash kiradi.'],
+            ['question'=>'Minimal buyurtma miqdori qancha?','answer'=>'Minimal buyurtma miqdori mahsulot tarkibi, shakli va qadoqlash talablariga qarab individual hisoblanadi. Aniq miqdor tijorat so‘rovidan keyin tasdiqlanadi.'],
+            ['question'=>'Kontrakt ishlab chiqarishga qanday buyurtma beriladi?','answer'=>'Talablarni kontakt shakli, telefon yoki elektron pochta orqali yuborish mumkin. Mutaxassislar texnik topshiriq va ishlab chiqarish imkoniyatlarini aniqlashtiradi.'],
+        ],
+    ],
+    'editorial'=>[
+        'title'=>'Tahririyat siyosati','description'=>'NEO-LABS saytidagi maqolalarni tayyorlash, manbalarni tanlash, ekspert tekshiruvi va xatolarni tuzatish tamoyillari.','preparation_title'=>'Maqolalar qanday tayyorlanadi','preparation_text'=>'Maqola mavzusi va matni administrator tomonidan kiritiladi. Chop etishdan oldin faktlar, sana, mahsulot nomlari va havolalar tekshirilishi kerak.','sources_title'=>'Manbalar','sources_text'=>'Ustuvor manbalar — rasmiy davlat va sog‘liqni saqlash organlari, ilmiy nashrlar, ishlab chiqaruvchi hujjatlari hamda aniq ko‘rsatilgan birlamchi manbalar. Har bir foydalanilgan manba maqola sahifasida ko‘rinadi.','review_title'=>'Tibbiy ekspertiza','review_text'=>'Reviewer faqat maqolani real mutaxassis ko‘rib chiqqanida, uning ismi, lavozimi va tekshirish sanasi bilan ko‘rsatiladi. Tekshiruv bo‘lmasa reviewer maydoni va reviewedBy schema chiqarilmaydi.','corrections_title'=>'Tuzatishlar','corrections_text'=>'Aniqlangan xato tekshiriladi, maqola tuzatiladi va yangilangan sana o‘zgartiriladi. Muhim tibbiy yoki xavfsizlik xatosi imkon qadar tez tuzatiladi.','advertising_title'=>'Reklama va homiylik','advertising_text'=>'Reklama yoki homiylik bo‘lsa, u o‘quvchiga aniq belgilanishi kerak. Tijorat hamkorligi tahririyat materialida tasdiqlanmagan tibbiy da’volar berishga asos bo‘lmaydi.','disclaimer'=>'Tibbiy ogohlantirish: sayt materiallari umumiy ma’lumot uchun mo‘ljallangan va shifokor maslahatini, tashxis yoki davolashni almashtirmaydi.',
+    ],
+    'contacts'=>['title'=>'NEO-LABS bilan bog‘lanish','description'=>'NEO-LABS telefonlari, email, Toshkentdagi joylashuvi va kontrakt ishlab chiqarish uchun aloqa shakli.','success'=>'Xabaringiz yuborildi! Tez orada bog‘lanamiz.','error'=>'Xabar yuborilmadi. Keyinroq urinib ko‘ring.','not_configured'=>'Xabar yuborish xizmati sozlanmagan.'],
+    'manufacturing'=>[
+        'title'=>'Kontrakt ishlab chiqarish xizmatlari','description'=>'NEO-LABS tabletka, kapsula, flakon va sache uchun to‘liq sikldagi kontrakt ishlab chiqarish hamda qadoqlash xizmatlari.','country'=>'O‘zbekiston','service_type'=>'Biologik faol qo‘shimchalarni kontrakt ishlab chiqarish',
+        'faq'=>[
+            ['question'=>'Qanday kontrakt ishlab chiqarish xizmatlari mavjud?','answer'=>'E’lon qilingan xizmatlar tabletka, kapsula, flakon va sache ishlab chiqarish hamda qadoqlashni o‘z ichiga oladi. Aniq talablar individual baholanadi.'],
+            ['question'=>'NEO-LABS mahsulotlarni qadoqlay oladimi?','answer'=>'Ha. E’lon qilingan imkoniyatlar blister, banka va sache qadoqlashni o‘z ichiga oladi.'],
+            ['question'=>'Hisob-kitobni qanday so‘rash mumkin?','answer'=>'Mahsulot formati, tarkibi va qadoqlash talablarini aloqa shakli, telefon yoki email orqali yuboring.'],
+        ],
+    ],
+    'certificates'=>['title'=>'Sertifikatlar va tasdiqlovchi hujjatlar','description'=>'NEO-LABS tomonidan administrator orqali e’lon qilingan sertifikatlar, ularning raqami, amal qilish muddati va tekshirish havolalari.','number'=>'Raqami','issuer'=>'Bergan tashkilot','issued_at'=>'Berilgan sana','expires_at'=>'Amal qilish muddati','scope'=>'Tegishliligi','details'=>'Batafsil','verify'=>'Tekshirish','empty'=>'Tasdiqlangan sertifikatlar hali e’lon qilinmagan.','number_colon'=>'Raqami:','issuer_colon'=>'Bergan tashkilot:','issued_colon'=>'Berilgan:','expires_colon'=>'Amal qiladi:','download'=>'Hujjatni yuklab olish','verify_official'=>'Rasmiy manbada tekshirish'],
+    'facts'=>['title'=>'NEO-LABS haqida asosiy faktlar','description'=>'NEO-LABS kompaniyasi haqidagi tekshiriladigan asosiy ma’lumotlar va ularning manbalari.','name'=>'Kompaniya nomi','legal_name'=>'Yuridik nomi','founded'=>'Tashkil etilgan sana','location'=>'Mamlakat va shahar','location_value'=>'O‘zbekiston, Toshkent','activity'=>'Faoliyat','activity_value'=>'Biologik faol qo‘shimchalar va kontrakt ishlab chiqarish','formats'=>'Mahsulot formatlari','formats_value'=>'Tabletka, kapsula, flakon va sache','capacity'=>'E’lon qilingan yillik quvvat','capacity_value'=>'100 mln tabletka; 65 mln kapsula; 30 mln flakon; 4,5 mln sache','services'=>'Xizmatlar','services_value'=>'To‘liq sikldagi kontrakt ishlab chiqarish va qadoqlash','phone'=>'Telefon','source'=>'Manba','document'=>'Tasdiqlovchi hujjat','official_pages'=>'Rasmiy sahifalar','certificate_notice'=>'Sertifikatlar faqat tasdiqlovchi hujjatlar sahifasida administrator e’lon qilganidan keyin ko‘rsatiladi.'],
+    'product'=>['composition'=>'Tarkibi','form'=>'Chiqarilish shakli','package'=>'Qadoq','storage'=>'Saqlash sharoiti','shelf_life'=>'Yaroqlilik muddati','facts_title'=>'Mahsulot haqida ma’lumot','full_name'=>'To‘liq nomi','summary'=>'Asosiy xususiyatlari','package_quantity'=>'Qadoq miqdori','manufacturer'=>'Ishlab chiqaruvchi','directions'=>'Qo‘llash tartibi','warnings'=>'Ogohlantirishlar','registration'=>'Ro‘yxatdan o‘tganlik ma’lumoti','updated'=>'Yangilangan sana','details'=>'Batafsil','open_product'=>':name mahsulot sahifasini ochish','card_description_fallback'=>'Mahsulot haqida batafsil ma’lumot uning sahifasida mavjud.','disclaimer'=>'Biologik faol qo‘shimcha dori vositasi emas. Ushbu ma’lumot shifokor maslahatini, tashxis yoki davolashni almashtirmaydi.'],
+    'article'=>['updated'=>'Yangilangan','people_label'=>'Muallif va ekspert','author'=>'Muallif:','reviewer'=>'Tekshirgan:','reviewed_at'=>'Tekshirilgan sana:','references'=>'Foydalanilgan manbalar','disclaimer'=>'Tibbiy ogohlantirish: material umumiy ma’lumot uchun berilgan va shifokor maslahatini, tashxis yoki davolashni almashtirmaydi.','editorial_policy'=>'Tahririyat siyosati'],
+    'author'=>['articles'=>'Muallif maqolalari'],
+    'errors'=>['not_found_title'=>'Sahifa topilmadi','not_found_description'=>'So‘ralgan sahifa topilmadi.','not_found_text'=>'Havolani tekshiring yoki bosh sahifaga qayting.','home'=>'Bosh sahifa'],
+];

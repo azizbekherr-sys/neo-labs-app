@@ -1,0 +1,21 @@
+# Googlebot, Bingbot, OAI-SearchBot and PerplexityBot are covered by this group.
+# Crawler names checked against official documentation on 2026-07-20.
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /login
+Disallow: /register
+Disallow: /api/
+Disallow: /products
+Disallow: /locale/
+Disallow: /index.html
+Disallow: /public.zip
+Disallow: /*?q=
+Disallow: /*&q=
+Disallow: /*?filter=
+Disallow: /*&filter=
+Disallow: /*?sort=
+Disallow: /*&sort=
+
+Sitemap: https://neo-labs.uz/sitemap.xml

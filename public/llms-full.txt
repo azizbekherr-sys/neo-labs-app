@@ -1,0 +1,74 @@
+# NEO-LABS: verified site summary
+
+Canonical website: https://neo-labs.uz/
+
+Languages: Uzbek (`/uz`), Russian (`/ru`) and English (`/en`).
+
+## Company
+
+- Public name: NEO-LABS
+- Legal name shown on the website: ООО «NEO-LABS»
+- Founded: 25 June 2020
+- Location published on the website: Sergeli district, Tashkent, Uzbekistan
+- Activity: production of biologically active/dietary supplements and full-cycle contract manufacturing
+- Contact phone: +998 99 101 88 39
+- Secondary phone: +998 97 445 96 39
+- Email: neo_labs2019@mail.ru
+
+An exact street address, tax ID, employee count, leadership list and social profiles are intentionally omitted until they are entered and verified by the administrator.
+
+## Published production formats
+
+- Tablets
+- Hard capsules
+- Bottles/vials
+- Sachets
+- PVC/Alu blister packaging
+- Perforated Alu-Alu blister packaging
+- Counting and filling tablets and capsules into containers
+- Sachet filling for powders and granules from 1 to 35 grams
+
+## Production capacity published on the website
+
+- 100 million tablets per year
+- 65 million capsules per year
+- 30 million bottles/vials per year
+- 4.5 million sachets per year
+
+## Contract manufacturing
+
+NEO-LABS accepts contract manufacturing enquiries. Minimum order quantities and timelines depend on the formulation, dosage form and packaging specification and are confirmed after the technical brief is reviewed.
+
+## Product information policy
+
+Each published product page can expose localized description, composition, form, package quantity, manufacturer, directions, warnings, storage conditions, shelf life, registration information, SKU/EAN and FAQs when these fields have been completed by the administrator. Missing fields are not invented. Prices and Offer schema are not published unless a real sales offer is available.
+
+Dietary supplements must not be represented as treating or curing diseases. Product information does not replace professional medical advice.
+
+## Articles and editorial controls
+
+Article pages support a visible author, role, reviewer, review date, publication date, modification date and references. Reviewer data is omitted unless a real expert review has occurred. See:
+
+- https://neo-labs.uz/uz/editorial-policy
+- https://neo-labs.uz/ru/editorial-policy
+- https://neo-labs.uz/en/editorial-policy
+
+## Certificates
+
+Only certificate records explicitly published by an administrator appear at:
+
+- https://neo-labs.uz/uz/certificates
+- https://neo-labs.uz/ru/certificates
+- https://neo-labs.uz/en/certificates
+
+No certification status should be inferred from an empty page. Published records may include the number, issuer, issue/expiry dates, scope, document and official verification URL.
+
+## Machine-readable discovery
+
+- Sitemap: https://neo-labs.uz/sitemap.xml
+- Short guide: https://neo-labs.uz/llms.txt
+- Company facts (Uzbek): https://neo-labs.uz/uz/company-facts
+- Company facts (Russian): https://neo-labs.uz/ru/company-facts
+- Company facts (English): https://neo-labs.uz/en/company-facts
+
+Last reviewed: 2026-07-20

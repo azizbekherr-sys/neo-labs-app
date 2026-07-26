@@ -1,0 +1,19 @@
+# NEO-LABS
+
+> NEO-LABS is a dietary supplement manufacturer and contract manufacturing company in Tashkent, Uzbekistan. The website is available in Uzbek, Russian and English.
+
+## Main pages
+
+- [About NEO-LABS (Uzbek)](https://neo-labs.uz/uz/about)
+- [About NEO-LABS (Russian)](https://neo-labs.uz/ru/about)
+- [About NEO-LABS (English)](https://neo-labs.uz/en/about)
+- [Products (English)](https://neo-labs.uz/en/catalog)
+- [Contract manufacturing (English)](https://neo-labs.uz/en/manufacturing)
+- [Production (English)](https://neo-labs.uz/en/production)
+- [Certificates and verification documents (English)](https://neo-labs.uz/en/certificates)
+- [Articles (English)](https://neo-labs.uz/en/news)
+- [Company facts (English)](https://neo-labs.uz/en/company-facts)
+- [Editorial policy (English)](https://neo-labs.uz/en/editorial-policy)
+- [Contacts (English)](https://neo-labs.uz/en/contacts)
+- [XML sitemap](https://neo-labs.uz/sitemap.xml)
+- [Full machine-readable summary](https://neo-labs.uz/llms-full.txt)

@@ -1,0 +1,56 @@
+# Render Blueprint for NEO-LABS (Laravel + Supabase)
+# Docs: https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: neo-labs
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free            # upgrade to 'starter' ($7/mo) if you add a persistent disk for uploads
+    region: singapore     # SAME region as the Supabase DB (ap-southeast-1) → near-zero app↔DB latency (fixes the slowness)
+    healthCheckPath: /login
+    autoDeploy: true
+    envVars:
+      # --- static values ---
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_PORT
+        value: "5432"
+      - key: DB_DATABASE
+        value: postgres
+      - key: DB_PERSISTENT
+        value: "true"
+      - key: SESSION_DRIVER
+        value: file
+      - key: CACHE_DRIVER
+        value: file
+      - key: AI_PROVIDER
+        value: gemini
+      - key: GEMINI_MODEL
+        value: gemini-flash-latest
+      # --- secrets / per-project (set these in the Render dashboard) ---
+      - key: APP_KEY
+        sync: false
+      - key: APP_URL
+        sync: false
+      - key: DB_HOST
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: PEXELS_API_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: TELEGRAM_CHAT_ID
+        sync: false

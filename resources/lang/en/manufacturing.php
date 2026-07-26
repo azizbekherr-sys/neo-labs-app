@@ -1,0 +1,97 @@
+<?php
+
+return [
+    'title' => 'Contract manufacturing',
+    'description' => 'NEO-LABS accepts contract manufacturing enquiries for tablets, capsules, bottles and sachets, from formula discussion through to packaging.',
+    'hero' => [
+        'eyebrow' => 'NEO-LABS B2B service',
+        'value' => 'Full-cycle manufacturing of dietary supplements: from discussing the formula through to packaging tablets, capsules, bottles and sachets.',
+        'primary' => 'Send a manufacturing enquiry',
+        'secondary' => '+998 99 101 88 39',
+        'image_alt' => 'NEO-LABS contract manufacturing line',
+        'formats' => ['Tablets', 'Capsules', 'Bottles', 'Sachets'],
+    ],
+    'overview' => [
+        'eyebrow' => 'Manufacturing capabilities',
+        'title' => 'From dosage form to finished packaging',
+        'text' => 'Product type, composition and packaging requirements are assessed individually against the technical brief. The minimum order quantity is calculated once the project parameters are clear.',
+    ],
+    'products' => [
+        'title' => 'What we manufacture',
+        'text' => 'Manufacturing formats published on the website:',
+        'items' => ['Standard tablets', 'Coated tablets', 'Hard gelatin capsules', 'Pellets and granules', 'Bottle and sachet formats'],
+    ],
+    'packaging' => [
+        'title' => 'Packaging capabilities',
+        'text' => 'The packaging format and size are agreed according to the product characteristics.',
+        'items' => ['PVC/Alu blisters', 'Perforated Alu–Alu blisters', 'Counting and filling tablets and capsules into jars', 'Packaging powders and granules into 1–35 gram sachets'],
+    ],
+    'process' => [
+        'eyebrow' => 'Working together',
+        'title' => 'How collaboration works',
+        'text' => 'Only stages previously published and verified on the website are shown.',
+        'items' => [
+            ['title' => 'Brief and technical specification', 'text' => 'The product format, composition and packaging requirements are discussed.'],
+            ['title' => 'Requirements assessment', 'text' => 'Manufacturing and packaging capabilities are assessed against the technical requirements.'],
+            ['title' => 'Estimate and agreement', 'text' => 'Volume, terms and schedule are documented and agreed.'],
+            ['title' => 'Manufacturing and packaging', 'text' => 'The product is manufactured and packaged according to the agreed technical documentation.'],
+        ],
+    ],
+    'capacity' => [
+        'eyebrow' => 'Published figures',
+        'title' => 'Annual manufacturing capacity',
+        'text' => 'The figures are based on information published by the company on this website.',
+        'items' => [
+            ['value' => '100', 'unit' => 'million', 'label' => 'tablets'],
+            ['value' => '65', 'unit' => 'million', 'label' => 'capsules'],
+            ['value' => '30', 'unit' => 'million', 'label' => 'bottles'],
+            ['value' => '4.5', 'unit' => 'million', 'label' => 'sachets'],
+        ],
+    ],
+    'trust' => [
+        'eyebrow' => 'Open and verifiable information',
+        'title' => 'Important foundations for collaboration',
+        'cards' => [
+            ['title' => 'Manufacturing capacity', 'text' => 'Published annual capacities are listed separately for tablets, capsules, bottles and sachets.'],
+            ['title' => 'Quality control', 'text' => 'Published control information relates to warehouse conditions, which are monitored with thermoelectric hygrometers.'],
+            ['title' => 'Equipment and technology', 'text' => 'Published capabilities include PVC/Alu, perforated Alu–Alu, counting into jars and sachet lines.'],
+            ['title' => 'Certificates and licences', 'text' => 'Only records published by an administrator with supporting documentation are displayed.'],
+            ['title' => 'Collaboration experience', 'text' => 'The logos below come from partner records published by the website administrator.'],
+        ],
+    ],
+    'certificates' => [
+        'title' => 'Supporting documents',
+        'empty' => 'No verified certificate or licence document has been published on the website yet.',
+        'view_all' => 'View the certificates page',
+        'details' => 'Document details',
+        'download' => 'Download document',
+    ],
+    'partners' => [
+        'eyebrow' => 'Partners',
+        'title' => 'Partners who place their trust in us',
+        'text' => 'Partners and brands published on the website.',
+        'logo_alt' => ':name logo',
+        'previous' => 'Previous partners',
+        'next' => 'Next partners',
+    ],
+    'cta' => [
+        'eyebrow' => 'New project',
+        'title' => 'Let’s discuss your project',
+        'text' => 'Send the product type, estimated volume and packaging requirements. The enquiry will be reviewed against the available technical capabilities.',
+        'phone_label' => 'Call us',
+        'email_label' => 'Email us',
+    ],
+    'form' => [
+        'title' => 'Manufacturing enquiry',
+        'text' => 'Complete the required fields and provide either a phone number or email address.',
+        'name' => 'Name', 'name_placeholder' => 'Your name',
+        'company' => 'Company', 'company_placeholder' => 'Company name',
+        'contact' => 'Phone or email', 'contact_placeholder' => '+998… or name@company.com',
+        'contact_invalid' => 'Enter a phone number or a valid email address.',
+        'product_type' => 'Product type', 'product_placeholder' => 'Select a product type',
+        'product_options' => ['Tablets', 'Capsules', 'Bottles', 'Sachets', 'Other format'],
+        'message' => 'Short note', 'message_placeholder' => 'Composition, estimated volume and packaging requirements',
+        'submit' => 'Send enquiry', 'required' => 'Required field',
+        'error_summary' => 'Please check the highlighted form fields.',
+    ],
+];

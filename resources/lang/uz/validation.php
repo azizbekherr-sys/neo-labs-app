@@ -1,0 +1,42 @@
+<?php
+
+return [
+    'required' => ':attribute maydonini to‘ldirish shart.',
+    'required_without' => ':values bo‘lmaganda :attribute maydonini to‘ldirish shart.',
+    'email' => ':attribute haqiqiy email manzili bo‘lishi kerak.',
+    'url' => ':attribute haqiqiy havola bo‘lishi kerak.',
+    'string' => ':attribute matn bo‘lishi kerak.',
+    'array' => ':attribute ro‘yxat ko‘rinishida bo‘lishi kerak.',
+    'boolean' => ':attribute qiymati to‘g‘ri yoki noto‘g‘ri bo‘lishi kerak.',
+    'date' => ':attribute haqiqiy sana bo‘lishi kerak.',
+    'image' => ':attribute rasm fayli bo‘lishi kerak.',
+    'file' => ':attribute fayl bo‘lishi kerak.',
+    'mimes' => ':attribute quyidagi formatlardan birida bo‘lishi kerak: :values.',
+    'in' => 'Tanlangan :attribute qiymati noto‘g‘ri.',
+    'alpha_dash' => ':attribute faqat harf, raqam, chiziq va pastki chiziqdan iborat bo‘lishi mumkin.',
+    'unique' => 'Bu :attribute avval ro‘yxatdan o‘tgan.',
+    'after_or_equal' => ':attribute sanasi :date sanasidan oldin bo‘lmasligi kerak.',
+    'min' => [
+        'string' => ':attribute kamida :min belgidan iborat bo‘lishi kerak.',
+        'numeric' => ':attribute kamida :min bo‘lishi kerak.',
+        'file' => ':attribute hajmi kamida :min KB bo‘lishi kerak.',
+        'array' => ':attribute kamida :min ta elementdan iborat bo‘lishi kerak.',
+    ],
+    'max' => [
+        'string' => ':attribute :max belgidan oshmasligi kerak.',
+        'numeric' => ':attribute :max dan oshmasligi kerak.',
+        'file' => ':attribute hajmi :max KB dan oshmasligi kerak.',
+        'array' => ':attribute :max tadan oshmasligi kerak.',
+    ],
+    'attributes' => [
+        'name_uz' => 'O‘zbekcha nom',
+        'name_ru' => 'Ruscha nom',
+        'name_en' => 'Inglizcha nom',
+        'title_uz' => 'O‘zbekcha sarlavha',
+        'title_ru' => 'Ruscha sarlavha',
+        'title_en' => 'Inglizcha sarlavha',
+        'email' => 'Email',
+        'password' => 'Parol',
+        'key' => 'Kalit',
+    ],
+];
