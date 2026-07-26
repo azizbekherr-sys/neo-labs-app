@@ -15,6 +15,10 @@ services:
         value: production
       - key: APP_DEBUG
         value: "false"
+      # Don't force-redirect to neo-labs.uz on the Render domain.
+      # Set to true only after neo-labs.uz points to this service.
+      - key: SEO_FORCE_CANONICAL_HOST
+        value: "false"
       - key: LOG_CHANNEL
         value: stderr
       - key: DB_CONNECTION
