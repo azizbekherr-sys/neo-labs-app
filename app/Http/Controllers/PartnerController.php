@@ -34,11 +34,8 @@ class PartnerController extends Controller
                 $file = $request->file("partners.$idx.logo");
                 $url = $row['url'] ?? null;
                 if ($file && $file->isValid()) {
-                    $ext = $file->getClientOriginalExtension();
-                    $filename = uniqid('pr_') . '_' . time() . '.' . $ext;
-                    $file->move(public_path('partners'), $filename);
                     Partner::create([
-                        'path' => 'partners/' . $filename,
+                        'path' => media_store($file, 'partners'),
                         'url' => $url,
                     ]);
                 }
@@ -46,10 +43,7 @@ class PartnerController extends Controller
         } else {
             foreach ($request->file('logos', []) as $file) {
                 if ($file && $file->isValid()) {
-                    $ext = $file->getClientOriginalExtension();
-                    $filename = uniqid('pr_') . '_' . time() . '.' . $ext;
-                    $file->move(public_path('partners'), $filename);
-                    Partner::create(['path' => 'partners/' . $filename]);
+                    Partner::create(['path' => media_store($file, 'partners')]);
                 }
             }
         }
@@ -66,14 +60,7 @@ class PartnerController extends Controller
 
         $oldPath = $partner->path;
         if ($request->hasFile('logo') && $request->file('logo')->isValid()) {
-            if (!is_dir(public_path('partners'))) {
-                mkdir(public_path('partners'), 0755, true);
-            }
-
-            $file = $request->file('logo');
-            $filename = uniqid('pr_') . '_' . time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('partners'), $filename);
-            $data['path'] = 'partners/' . $filename;
+            $data['path'] = media_store($request->file('logo'), 'partners');
         }
 
         $data['url'] = $data['url'] ?? null;
@@ -96,6 +83,11 @@ class PartnerController extends Controller
 
     private function deleteLogoFiles(?string $relativePath): void
     {
+        if (\Illuminate\Support\Str::startsWith((string) $relativePath, ['http://', 'https://'])) {
+            media_delete($relativePath);
+            return;
+        }
+
         $relativePath = ltrim((string) $relativePath, '/');
         if ($relativePath === '' || !str_starts_with($relativePath, 'partners/')) {
             return;

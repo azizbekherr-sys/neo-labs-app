@@ -43,22 +43,18 @@ class ArticleController extends Controller
             'faq_questions_en' => ['nullable', 'array'], 'faq_answers_en' => ['nullable', 'array'],
         ]);
 
-        // Upload photo to public/articles
+        // Upload photo (Supabase Storage or local, per MEDIA_DISK)
         if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
-            if (!is_dir(public_path('articles'))) {
-                mkdir(public_path('articles'), 0755, true);
-            }
-            $file = $request->file('photo');
-            $filename = (Str::slug($validated['title_uz']) ?: 'neo-labs-article') . '-' . Str::lower(Str::random(8)) . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('articles'), $filename);
-            $validated['photo'] = 'articles/' . $filename;
+            $validated['photo'] = media_store($request->file('photo'), 'articles');
         }
 
-        // AI-selected image (already downloaded into public/articles by the AI-fill endpoint)
+        // AI-selected image reference from the AI-fill endpoint (a full URL, or a local articles/ path)
         if (empty($validated['photo']) && !empty($validated['photo_path'])) {
-            $candidate = ltrim((string) $validated['photo_path'], '/');
-            if (str_starts_with($candidate, 'articles/') && is_file(public_path($candidate))) {
+            $candidate = (string) $validated['photo_path'];
+            if (Str::startsWith($candidate, ['http://', 'https://'])) {
                 $validated['photo'] = $candidate;
+            } elseif (str_starts_with(ltrim($candidate, '/'), 'articles/') && is_file(public_path(ltrim($candidate, '/')))) {
+                $validated['photo'] = ltrim($candidate, '/');
             }
         }
         unset($validated['photo_path']);
@@ -104,11 +100,7 @@ class ArticleController extends Controller
         ]);
         $oldPhoto = $article->photo;
         if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
-            if (!is_dir(public_path('articles'))) mkdir(public_path('articles'), 0755, true);
-            $file = $request->file('photo');
-            $filename = (Str::slug($validated['title_uz']) ?: 'neo-labs-article') . '-' . Str::lower(Str::random(8)) . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('articles'), $filename);
-            $validated['photo'] = 'articles/' . $filename;
+            $validated['photo'] = media_store($request->file('photo'), 'articles');
         }
         $validated['author_slug'] = !empty($validated['author_name']) ? Str::slug($validated['author_name']) : null;
         $validated['references_uz'] = $this->lines($request->input('references_uz_text'));
@@ -149,14 +141,8 @@ class ArticleController extends Controller
         return $faqs;
     }
 
-    private function deletePhoto(?string $relativePath): void
+    private function deletePhoto(?string $ref): void
     {
-        $relativePath = ltrim((string) $relativePath, '/');
-        if ($relativePath !== '' && str_starts_with($relativePath, 'articles/')) {
-            $path = public_path($relativePath);
-            if (is_file($path)) {
-                @unlink($path);
-            }
-        }
+        media_delete($ref, ['articles/']);
     }
 }

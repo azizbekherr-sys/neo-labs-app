@@ -203,21 +203,17 @@ class ProductController extends Controller
             return [];
         }
 
-        $directory = public_path('products');
-        if (!is_dir($directory)) {
-            mkdir($directory, 0755, true);
-        }
-
         $images = [];
         foreach ($request->file('images', []) as $file) {
             if (!$file || !$file->isValid()) {
                 continue;
             }
-            $filename = (Str::slug($name) ?: 'neo-labs-product') . '-' . Str::lower(Str::random(8)) . '.' . $file->getClientOriginalExtension();
-            $file->move($directory, $filename);
-            $relativePath = 'products/' . $filename;
-            ProductMedia::generateVariants($relativePath);
-            $images[] = $relativePath;
+            $ref = media_store($file, 'products');
+            // Responsive/optimized variants only apply to locally-stored files.
+            if (!Str::startsWith($ref, ['http://', 'https://'])) {
+                ProductMedia::generateVariants($ref);
+            }
+            $images[] = $ref;
         }
 
         return $images;
@@ -243,14 +239,7 @@ class ProductController extends Controller
             return;
         }
 
-        $directory = public_path('instructions');
-        if (!is_dir($directory)) {
-            mkdir($directory, 0755, true);
-        }
-        $file = $request->file('instruction_file');
-        $filename = 'product-instruction-' . Str::lower(Str::random(12)) . '.pdf';
-        $file->move($directory, $filename);
-        $validated['instruction_file'] = 'instructions/' . $filename;
+        $validated['instruction_file'] = media_store($request->file('instruction_file'), 'instructions');
     }
 
     private function syncRelatedProducts(Product $product, array $relatedIds): void
@@ -268,6 +257,11 @@ class ProductController extends Controller
 
     private function deletePublicAsset(string $path, array $allowedPrefixes): void
     {
+        if (Str::startsWith($path, ['http://', 'https://'])) {
+            media_delete($path);
+            return;
+        }
+
         $normalized = ltrim(str_replace('\\', '/', $path), '/');
         if (!collect($allowedPrefixes)->contains(fn ($prefix) => Str::startsWith($normalized, $prefix))) {
             return;

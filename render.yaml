@@ -33,6 +33,12 @@ services:
         value: gemini
       - key: GEMINI_MODEL
         value: gemini-flash-latest
+      - key: MEDIA_DISK
+        value: supabase
+      - key: SUPABASE_URL
+        value: https://diquverxdvkyqxueswvg.supabase.co
+      - key: SUPABASE_BUCKET
+        value: media
       # --- secrets / per-project (set these in the Render dashboard) ---
       - key: APP_KEY
         sync: false
@@ -47,6 +53,8 @@ services:
       - key: GEMINI_API_KEY
         sync: false
       - key: PEXELS_API_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
         sync: false
       - key: ANTHROPIC_API_KEY
         sync: false

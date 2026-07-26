@@ -14,7 +14,7 @@ class CertificateController extends Controller
         $data = $this->validated($request);
 
         if ($request->hasFile('document')) {
-            $data['document_path'] = $request->file('document')->store('certificates', 'public');
+            $data['document_path'] = media_store($request->file('document'), 'certificates');
         }
         $data['is_published'] = $request->boolean('is_published');
         Certificate::create($data);
@@ -29,7 +29,7 @@ class CertificateController extends Controller
         $oldDocument = $certificate->document_path;
 
         if ($request->hasFile('document')) {
-            $data['document_path'] = $request->file('document')->store('certificates', 'public');
+            $data['document_path'] = media_store($request->file('document'), 'certificates');
         }
         $data['is_published'] = $request->boolean('is_published');
         $certificate->update($data);
@@ -75,9 +75,7 @@ class CertificateController extends Controller
 
     private function deleteDocument(?string $path): void
     {
-        if ($path && str_starts_with(ltrim($path, '/'), 'certificates/')) {
-            Storage::disk('public')->delete($path);
-        }
+        media_delete($path, ['certificates/']);
     }
 
     private function clearCache(): void

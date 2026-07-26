@@ -80,7 +80,7 @@
         <div class="admin-current-media mt-2">
           @foreach(collect($product->images ?: [$product->image])->filter() as $image)
             <label class="admin-current-media__item">
-              <img src="{{ asset($image) }}" alt="{{ $product->name_uz }} rasmi">
+              <img src="{{ media_url($image) }}" alt="{{ $product->name_uz }} rasmi">
               <span><input type="checkbox" name="remove_images[]" value="{{ $image }}"> Olib tashlash</span>
             </label>
           @endforeach
@@ -208,7 +208,7 @@
         <label class="form-label" for="{{ $formPrefix }}-instruction">PDF yo‘riqnoma</label>
         <input class="form-control admin-file-input" id="{{ $formPrefix }}-instruction" type="file" name="instruction_file" accept="application/pdf" aria-describedby="{{ $formPrefix }}-instruction-help">
         <span class="admin-file-help" id="{{ $formPrefix }}-instruction-help">PDF, 10 MB gacha.</span>
-        @if($editing && $product->instruction_file)<a class="small d-inline-block mt-1" href="{{ asset($product->instruction_file) }}" target="_blank" rel="noopener">Mavjud yo‘riqnomani ko‘rish</a>@endif
+        @if($editing && $product->instruction_file)<a class="small d-inline-block mt-1" href="{{ media_url($product->instruction_file) }}" target="_blank" rel="noopener">Mavjud yo‘riqnomani ko‘rish</a>@endif
       </div>
       <div class="col-12 col-md-6">
         <label class="form-label" for="{{ $formPrefix }}-review-status">Tibbiy review holati</label>

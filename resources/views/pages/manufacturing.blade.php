@@ -191,7 +191,7 @@
                       {{ $certificateName }}@if($certificate->number) — {{ $certificate->number }}@endif
                     </a>
                     @if($certificate->document_path)
-                      · <a href="{{ asset($certificate->document_path) }}" download>{{ __('manufacturing.certificates.download') }}</a>
+                      · <a href="{{ media_url($certificate->document_path) }}" download>{{ __('manufacturing.certificates.download') }}</a>
                     @endif
                   </li>
                 @endforeach
@@ -238,7 +238,7 @@
                     <a href="{{ $partnerUrl }}" target="_blank" rel="noopener noreferrer">
                   @endif
                   <img
-                    src="{{ asset($displayPath) }}"
+                    src="{{ media_url($displayPath) }}"
                     width="{{ $meta['width'] ?? 360 }}"
                     height="{{ $meta['height'] ?? 180 }}"
                     alt="{{ $partnerName ? __('manufacturing.partners.logo_alt', ['name' => $partnerName]) : '' }}"

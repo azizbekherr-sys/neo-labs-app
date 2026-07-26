@@ -26,7 +26,7 @@
         @if($certificate->issued_at)<li><strong>{{ __('site.certificates.issued_colon') }}</strong> {{ $certificate->issued_at->format('d.m.Y') }}</li>@endif
         @if($certificate->expires_at)<li><strong>{{ __('site.certificates.expires_colon') }}</strong> {{ $certificate->expires_at->format('d.m.Y') }}</li>@endif
       </ul>
-      @if($certificate->document_path)<a data-analytics="certificate_download" href="{{ asset('storage/' . $certificate->document_path) }}" download>{{ __('site.certificates.download') }}</a>@endif
+      @if($certificate->document_path)<a data-analytics="certificate_download" href="{{ media_url($certificate->document_path) }}" download>{{ __('site.certificates.download') }}</a>@endif
       @if($certificate->verification_url)<p><a href="{{ $certificate->verification_url }}" rel="noopener noreferrer">{{ __('site.certificates.verify_official') }}</a></p>@endif
     </article>
   </main>

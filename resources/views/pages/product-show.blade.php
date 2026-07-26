@@ -226,7 +226,7 @@
             <div><dt>{{ __('content.product.manufacturer') }}</dt><dd>{{ $manufacturer }}</dd></div>
             <div><dt>{{ __('content.product.country') }}</dt><dd>{{ $country }}</dd></div>
             @if($registration)<div><dt>{{ __('content.product.registration') }}</dt><dd>{{ \App\Support\Content::plain($registration) }}</dd></div>@endif
-            @if($product->instruction_file)<div><dt>{{ __('content.product.instruction_label') }}</dt><dd><a href="{{ asset(ltrim($product->instruction_file, '/')) }}" download>{{ __('content.product.instruction') }}</a></dd></div>@endif
+            @if($product->instruction_file)<div><dt>{{ __('content.product.instruction_label') }}</dt><dd><a href="{{ media_url($product->instruction_file) }}" download>{{ __('content.product.instruction') }}</a></dd></div>@endif
           </dl>
         </section>
 

@@ -38,7 +38,7 @@
                         'pr_693c2d6df0981_1765551469.jpg' => 'Biofit',
                       ];
                       $optimizedPartner = 'partners/optimized/' . pathinfo($partnerFile, PATHINFO_FILENAME) . '.webp';
-                      $src = asset(is_file(public_path($optimizedPartner)) ? $optimizedPartner : $partnerPath);
+                      $src = media_url(is_file(public_path($optimizedPartner)) ? $optimizedPartner : $partnerPath);
                       $partnerName = $partnerNames[$partnerFile] ?? '';
                       $plink = is_object($partner) ? ($partner->url ?? null) : null;
                     @endphp

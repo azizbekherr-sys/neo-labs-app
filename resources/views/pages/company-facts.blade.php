@@ -30,7 +30,7 @@
           <dd style="padding:14px;margin:0;border-bottom:1px solid #dceedd;">
             {{ $factValue }}
             @if($fact->source_url)<br><a href="{{ $fact->source_url }}" rel="noopener noreferrer">{{ __('site.facts.source') }}</a>@endif
-            @if($fact->document_path)<br><a href="{{ asset('storage/' . $fact->document_path) }}">{{ __('site.facts.document') }}</a>@endif
+            @if($fact->document_path)<br><a href="{{ media_url($fact->document_path) }}">{{ __('site.facts.document') }}</a>@endif
           </dd>
         @endforeach
       </dl>

@@ -40,6 +40,18 @@ return [
         'provider' => env('AI_PROVIDER', 'gemini'),
     ],
 
+    // Media storage: 'local' (public/ folder) or 'supabase' (free object storage,
+    // persists on ephemeral hosts like Render free tier).
+    'media' => [
+        'disk' => env('MEDIA_DISK', 'local'),
+    ],
+
+    'supabase' => [
+        'url' => env('SUPABASE_URL'),
+        'key' => env('SUPABASE_SERVICE_KEY'),
+        'bucket' => env('SUPABASE_BUCKET', 'media'),
+    ],
+
     'anthropic' => [
         'key' => env('ANTHROPIC_API_KEY'),
         'model' => env('ANTHROPIC_MODEL', 'claude-opus-4-8'),

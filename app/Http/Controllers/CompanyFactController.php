@@ -16,7 +16,7 @@ class CompanyFactController extends Controller
         $oldDocument = $fact?->document_path;
 
         if ($request->hasFile('document')) {
-            $data['document_path'] = $request->file('document')->store('company-facts', 'public');
+            $data['document_path'] = media_store($request->file('document'), 'company-facts');
         }
         $data['is_published'] = $request->boolean('is_published');
         $fact = CompanyFact::updateOrCreate(['key' => $data['key']], $data);
@@ -34,7 +34,7 @@ class CompanyFactController extends Controller
         $oldDocument = $companyFact->document_path;
 
         if ($request->hasFile('document')) {
-            $data['document_path'] = $request->file('document')->store('company-facts', 'public');
+            $data['document_path'] = media_store($request->file('document'), 'company-facts');
         }
         $data['is_published'] = $request->boolean('is_published');
         $companyFact->update($data);
@@ -73,8 +73,6 @@ class CompanyFactController extends Controller
 
     private function deleteDocument(?string $path): void
     {
-        if ($path && str_starts_with(ltrim($path, '/'), 'company-facts/')) {
-            Storage::disk('public')->delete($path);
-        }
+        media_delete($path, ['company-facts/']);
     }
 }

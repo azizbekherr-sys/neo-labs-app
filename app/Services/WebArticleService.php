@@ -96,12 +96,7 @@ class WebArticleService
             if ($ext === null || strlen($body) < 1024 || strlen($body) > 8 * 1024 * 1024) {
                 return null; // not an image, too small, or too large
             }
-            if (!is_dir(public_path('articles'))) {
-                mkdir(public_path('articles'), 0755, true);
-            }
-            $name = 'articles/ai-' . Str::lower(Str::random(10)) . '.' . $ext;
-            file_put_contents(public_path($name), $body);
-            return $name;
+            return media_store_binary($body, 'articles', $ext, $type);
         } catch (\Throwable $e) {
             return null;
         }
