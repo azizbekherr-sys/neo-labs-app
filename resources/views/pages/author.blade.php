@@ -13,7 +13,7 @@
   ]);
 @endphp
 <x-layouts.index :title="$name" :description="__('content.author.bio')" :schema="$schema">
-  @push('head')<link rel="stylesheet" href="{{ asset('css/content-pages.css') }}">@endpush
+  @push('head')<link rel="stylesheet" href="{{ asset('css/content-pages.css') }}?v={{ filemtime(public_path('css/content-pages.css')) }}">@endpush
   <main class="content-page author-page">
     <div class="container article-shell">
       <section class="author-profile" aria-labelledby="author-title">

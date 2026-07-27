@@ -29,7 +29,7 @@
     type="image/webp"
     fetchpriority="high"
   />
-  <link rel="stylesheet" href="{{ asset('css/manufacturing.css') }}" />
+  <link rel="stylesheet" href="{{ asset('css/manufacturing.css') }}?v={{ filemtime(public_path('css/manufacturing.css')) }}" />
 @endpush
 
 @push('scripts')

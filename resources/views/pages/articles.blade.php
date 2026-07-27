@@ -7,7 +7,7 @@
   preload-image="/img/neo-labs-products.webp"
 >
   @push('head')
-    <link rel="stylesheet" href="{{ asset('css/content-pages.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/content-pages.css') }}?v={{ filemtime(public_path('css/content-pages.css')) }}">
   @endpush
 
   <main class="content-page">

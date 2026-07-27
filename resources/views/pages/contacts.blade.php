@@ -1,5 +1,5 @@
 <x-layouts.index :title="__('site.contacts.title')" :description="__('site.contacts.description')" image="/img/neo-labs-contacts.webp" preload-image="/img/neo-labs-contacts.webp">
-  @push('head')<link rel="stylesheet" href="{{ asset('css/content-pages.css') }}">@endpush
+  @push('head')<link rel="stylesheet" href="{{ asset('css/content-pages.css') }}?v={{ filemtime(public_path('css/content-pages.css')) }}">@endpush
   <main class="content-page contact-page">
     <section class="content-hero contact-hero" aria-labelledby="contact-title">
       <div class="container content-hero__inner">
