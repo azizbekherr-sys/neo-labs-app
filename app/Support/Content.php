@@ -11,7 +11,8 @@ class Content
 {
     private const ALLOWED_TAGS = [
         'p', 'br', 'strong', 'em', 'b', 'i', 'ul', 'ol', 'li',
-        'h2', 'h3', 'h4', 'blockquote', 'a',
+        'h2', 'h3', 'h4', 'blockquote', 'a', 'img',
+        'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td', 'caption',
     ];
 
     public static function localized($model, string $base, ?string $locale = null)
@@ -107,6 +108,15 @@ class Content
                 continue;
             }
 
+            if ($node->nodeType === XML_TEXT_NODE) {
+                $parentTag = $parent instanceof DOMElement ? strtolower($parent->tagName) : '';
+                if ($parentTag !== 'a' && str_contains((string) $node->nodeValue, '://')) {
+                    self::linkifyTextNode($node);
+                }
+                $node = $next;
+                continue;
+            }
+
             if ($node instanceof DOMElement) {
                 $tag = strtolower($node->tagName);
                 if (in_array($tag, ['script', 'style', 'iframe', 'object', 'embed', 'form'], true)) {
@@ -126,6 +136,8 @@ class Content
                 }
 
                 $href = $tag === 'a' ? trim($node->getAttribute('href')) : '';
+                $imgSrc = $tag === 'img' ? trim($node->getAttribute('src')) : '';
+                $imgAlt = $tag === 'img' ? (string) $node->getAttribute('alt') : '';
                 while ($node->attributes && $node->attributes->length) {
                     $node->removeAttributeNode($node->attributes->item(0));
                 }
@@ -133,11 +145,74 @@ class Content
                     $node->setAttribute('href', $href);
                     $node->setAttribute('rel', 'noopener noreferrer');
                 }
+                if ($tag === 'img') {
+                    if (preg_match('#^(https?://|/)#i', $imgSrc)) {
+                        $node->setAttribute('src', $imgSrc);
+                        $node->setAttribute('alt', $imgAlt);
+                        $node->setAttribute('loading', 'lazy');
+                        $node->setAttribute('decoding', 'async');
+                    } else {
+                        $parent->removeChild($node);
+                        $node = $next;
+                        continue;
+                    }
+                }
 
                 self::sanitizeChildren($node);
             }
 
             $node = $next;
         }
+    }
+
+    /** Turn bare http(s) URLs inside a text node into safe external links. */
+    private static function linkifyTextNode(DOMNode $node): void
+    {
+        $text = (string) $node->nodeValue;
+        if (!preg_match('#https?://#u', $text)) {
+            return;
+        }
+
+        $parts = preg_split(
+            '#(https?://[^\s<>()"\']+[^\s<>()"\'.,;:!?])#u',
+            $text,
+            -1,
+            PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY
+        );
+        if (!$parts) {
+            return;
+        }
+
+        $doc = $node->ownerDocument;
+        $parent = $node->parentNode;
+        if (!$doc || !$parent) {
+            return;
+        }
+
+        $hasUrl = false;
+        foreach ($parts as $part) {
+            if (preg_match('#^https?://#', $part)) {
+                $hasUrl = true;
+                break;
+            }
+        }
+        if (!$hasUrl) {
+            return;
+        }
+
+        foreach ($parts as $part) {
+            if (preg_match('#^https?://#', $part)) {
+                $anchor = $doc->createElement('a');
+                $anchor->setAttribute('href', $part);
+                $anchor->setAttribute('rel', 'noopener noreferrer nofollow');
+                $anchor->setAttribute('target', '_blank');
+                $anchor->appendChild($doc->createTextNode($part));
+                $parent->insertBefore($anchor, $node);
+            } else {
+                $parent->insertBefore($doc->createTextNode($part), $node);
+            }
+        }
+
+        $parent->removeChild($node);
     }
 }

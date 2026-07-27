@@ -28,7 +28,7 @@ services:
       - key: DB_DATABASE
         value: postgres
       - key: DB_PERSISTENT
-        value: "true"
+        value: "false"
       - key: SESSION_DRIVER
         value: file
       - key: CACHE_DRIVER

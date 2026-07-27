@@ -70,11 +70,19 @@
               <div><dt>{{ __('content.article.reviewer') }}</dt><dd>{{ $article->reviewer_name }} @if($reviewerRole)<span>— {{ $reviewerRole }}</span>@endif</dd></div>
             @endif
           </dl>
-          <div class="article-cover"><img src="{{ $media['src'] }}" @if($media['srcset']) srcset="{{ $media['srcset'] }}" sizes="(min-width:900px) 900px, 100vw" @endif width="{{ $media['width'] }}" height="{{ $media['height'] }}" alt="{{ $title }}" loading="eager" fetchpriority="high" decoding="async"></div>
+          @if($article->photo)
+            <div class="article-cover"><img src="{{ $media['src'] }}" @if($media['srcset']) srcset="{{ $media['srcset'] }}" sizes="(min-width:880px) 840px, 100vw" @endif width="{{ $media['width'] }}" height="{{ $media['height'] }}" alt="{{ $title }}" loading="eager" fetchpriority="high" decoding="async"></div>
+          @endif
         </header>
 
         <div class="article-notice">{{ __('content.article.notice') }}</div>
-        <div class="article-body rich-content">{!! $body !!}</div>
+        <div class="article-body rich-content">
+          @if(trim($body) !== '')
+            {!! $body !!}
+          @else
+            <p>{{ $locale === 'uz' ? 'Maqola matni vaqtincha mavjud emas.' : ($locale === 'en' ? 'The article content is temporarily unavailable.' : 'Содержание статьи временно недоступно.') }}</p>
+          @endif
+        </div>
 
         @if(is_array($references) && count($references))
           <section class="article-references" aria-labelledby="references-title">

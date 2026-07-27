@@ -76,10 +76,12 @@ return [
             'prefix_indexes' => true,
             'schema' => 'public',
             'sslmode' => 'prefer',
-            // Reuse the DB connection across requests — avoids the ~2s TLS
-            // handshake to the remote Supabase pooler on every page load.
-            'options' => extension_loaded('pdo')
-                ? [PDO::ATTR_PERSISTENT => (bool) env('DB_PERSISTENT', true)]
+            // Persistent connections are OFF by default: the Supabase pooler
+            // closes idle connections, and a reused dead handle throws
+            // "server closed the connection unexpectedly". When the app runs in
+            // the same region as the DB, a fresh connection is ~1ms anyway.
+            'options' => extension_loaded('pdo') && (bool) env('DB_PERSISTENT', false)
+                ? [PDO::ATTR_PERSISTENT => true]
                 : [],
         ],
 
