@@ -21,6 +21,10 @@ class AiContentController extends Controller
             return response()->json(['ok' => false, 'error' => 'Maqola havolasini kiriting.'], 422);
         }
 
+        // Full article generation (fetch + AI in three languages) can take a
+        // while; give the request room so it isn't killed mid-generation.
+        @set_time_limit(210);
+
         try {
             $sourceText = null;
             $ogImage = null;

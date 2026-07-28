@@ -138,7 +138,9 @@ class WebArticleService
         $text = html_entity_decode(strip_tags($scope), ENT_QUOTES | ENT_HTML5, 'UTF-8');
         $text = trim(preg_replace('/\s+/u', ' ', $text));
 
-        return Str::limit($text, 8000, '');
+        // Keep a large slice so the AI receives the full source article, not a
+        // truncated summary. Long-form pieces can run well past 8k characters.
+        return Str::limit($text, 40000, '');
     }
 
     private function absolute(string $base, ?string $url): ?string

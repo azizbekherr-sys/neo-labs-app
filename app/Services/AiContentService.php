@@ -49,16 +49,18 @@ class AiContentService
         $user = $this->articleUserPrompt($mode, $sourceText, $fields) . "\n\n" . $this->articleKeysHint();
 
         $provider = (string) config('services.ai.provider', 'gemini');
+        // Articles need a large output budget: a full, comprehensive body in
+        // three languages. Give it room and time so nothing is truncated.
         $data = $provider === 'anthropic'
-            ? $this->callAnthropic($system, $user, $this->articleSchema())
-            : $this->callGemini($system, $user);
+            ? $this->callAnthropic($system, $user, $this->articleSchema(), 40000, 170)
+            : $this->callGemini($system, $user, 40000, 170);
 
         return $this->normalizeArticle($data);
     }
 
     // ---------------------------------------------------------------- Gemini
 
-    private function callGemini(string $system, string $user): array
+    private function callGemini(string $system, string $user, int $maxTokens = 8000, int $timeout = 90): array
     {
         $key = (string) config('services.gemini.key');
         if ($key === '') {
@@ -68,14 +70,14 @@ class AiContentService
         $base = rtrim((string) config('services.gemini.base_url', 'https://generativelanguage.googleapis.com'), '/');
 
         $response = Http::withHeaders(['x-goog-api-key' => $key, 'content-type' => 'application/json'])
-            ->timeout(90)
+            ->timeout($timeout)
             ->post("{$base}/v1beta/models/{$model}:generateContent", [
                 'system_instruction' => ['parts' => [['text' => $system]]],
                 'contents' => [['role' => 'user', 'parts' => [['text' => $user]]]],
                 'generationConfig' => [
                     'responseMimeType' => 'application/json',
                     'temperature' => 0.4,
-                    'maxOutputTokens' => 8000,
+                    'maxOutputTokens' => $maxTokens,
                 ],
             ]);
 
@@ -90,7 +92,7 @@ class AiContentService
 
     // ------------------------------------------------------------- Anthropic
 
-    private function callAnthropic(string $system, string $user, ?array $schema = null): array
+    private function callAnthropic(string $system, string $user, ?array $schema = null, int $maxTokens = 8000, int $timeout = 90): array
     {
         $key = (string) config('services.anthropic.key');
         if ($key === '') {
@@ -103,9 +105,9 @@ class AiContentService
             'x-api-key' => $key,
             'anthropic-version' => '2023-06-01',
             'content-type' => 'application/json',
-        ])->timeout(90)->post($base . '/v1/messages', [
+        ])->timeout($timeout)->post($base . '/v1/messages', [
             'model' => $model,
-            'max_tokens' => 8000,
+            'max_tokens' => $maxTokens,
             'system' => $system,
             'output_config' => ['format' => ['type' => 'json_schema', 'schema' => $schema ?? $this->schema()]],
             'messages' => [['role' => 'user', 'content' => $user]],
@@ -228,7 +230,9 @@ You are an editorial assistant for NEO-LABS, a health & wellness brand in Uzbeki
 
 RULES:
 - Return ONLY a single JSON object; every field must be present (empty string if unknown).
-- REWRITE in your own words — do NOT copy the source text verbatim. Restructure, summarize and rephrase into an original, well-organized article. Never plagiarize.
+- COMPLETENESS IS THE #1 PRIORITY: the article MUST include EVERY piece of information from the source — every section, heading, fact, number, statistic, name, quote, list item, step, example, recommendation, warning and detail. Do NOT summarize, shorten, condense, skip or omit anything. The finished body must be AT LEAST as long and as complete as the source; when in doubt, include more, never less.
+- REWRITE in your own words — do NOT copy the source text verbatim. Rephrase and reorganize it into original, well-structured prose, but PRESERVE all of the source's information and meaning while doing so. Never plagiarize, but never drop content in the name of brevity.
+- Preserve the source's structure: keep the same sections/headings (rephrased) and cover them in the same order and depth as the original.
 - Produce the article body as clean semantic HTML using <h2>, <h3>, <p>, <ul>, <li>, <strong> (no <html>/<body>, no inline styles, no images).
 - Keep the same meaning across all three languages; translations must be natural and idiomatic. Uzbek uses the Latin alphabet (o‘, g‘, sh, ch).
 - Health-claim safety: do NOT claim the content "cures", "treats" or "prevents" disease; keep an informational, responsible tone. Do NOT invent statistics, studies, citations, dates, or author names.
@@ -252,7 +256,9 @@ TXT;
             return "TASK: The Uzbek article fields below are filled. Keep the uz_* values (echo them back), produce natural ru_* and en_* translations of the title, body and SEO fields, and add an image_query.\n\nENTERED UZBEK ARTICLE:\n{$context}";
         }
 
-        return "TASK: Using the SOURCE ARTICLE below as reference material, write an original, rewritten article (do not copy it) with a title, an HTML body, and SEO for uz, ru and en, plus an image_query for a matching stock photo.\n\nSOURCE ARTICLE:\n" . trim((string) $sourceText);
+        return "TASK: Rewrite the ENTIRE source article below into an original article (do not copy it verbatim) for uz, ru and en, plus an image_query for a matching stock photo.\n"
+            . "You MUST carry over ALL of the information from the source: every section, heading, paragraph, fact, number, statistic, name, quote, list, step, example and recommendation. Do not summarize, shorten or omit anything — the result must be at least as complete and detailed as the source. Reword and restructure, but keep 100% of the content.\n\n"
+            . "SOURCE ARTICLE:\n" . trim((string) $sourceText);
     }
 
     private function pickArticleContext(array $fields): array
