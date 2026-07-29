@@ -6,7 +6,7 @@ return [
     'canonical_host' => env('SEO_CANONICAL_HOST', 'neo-labs.uz'),
     'force_canonical_host' => env('SEO_FORCE_CANONICAL_HOST', true),
     'locales' => ['ru', 'uz', 'en'],
-    'default_locale' => 'ru',
+    'default_locale' => 'uz',
 
     'site_name' => 'NEO-LABS',
     'legal_name' => env('COMPANY_LEGAL_NAME', 'ООО «NEO-LABS»'),
@@ -17,6 +17,11 @@ return [
     'email' => env('COMPANY_EMAIL', 'neo_labs2019@mail.ru'),
     'tax_id' => env('COMPANY_TAX_ID'),
     'employee_count' => env('COMPANY_EMPLOYEE_COUNT'),
+    'opening_hours' => [
+        'days' => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+        'opens' => '09:00',
+        'closes' => '18:00',
+    ],
 
     'address' => [
         'country_code' => 'UZ',
@@ -54,6 +59,7 @@ return [
     'verification' => [
         'google' => env('GOOGLE_SITE_VERIFICATION'),
         'bing' => env('BING_SITE_VERIFICATION'),
+        'yandex' => env('YANDEX_SITE_VERIFICATION'),
     ],
 
     'analytics' => [

@@ -515,6 +515,8 @@
         </div>
       </section>
 
+      <x-faq :items="__('site.home.faq')" />
+
       <section id="contacts" class="contacts">
         <div class="container">
           <div class="contacts-panel">

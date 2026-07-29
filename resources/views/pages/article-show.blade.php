@@ -62,7 +62,6 @@
 
   <main class="content-page article-detail">
     <div class="container article-shell">
-      <nav class="back-nav" aria-label="Breadcrumb"><a href="{{ route('articles') }}">← {{ __('content.article.back') }}</a></nav>
       <article>
         <header class="article-header">
           @if($isArchive)<p class="archive-label">{{ __('content.article.archive', ['year' => $publishedYear]) }}</p>@endif

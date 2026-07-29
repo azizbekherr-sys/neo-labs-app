@@ -4,7 +4,7 @@
       <p style="font-size:5rem;font-weight:800;color:#69ce79;margin:0;">404</p>
       <h1>{{ __('site.errors.not_found_title') }}</h1>
       <p style="color:#64748b;">{{ __('site.errors.not_found_text') }}</p>
-      <a class="btn" href="{{ route('home') }}">{{ __('site.errors.home') }}</a>
+      <a class="btn" href="{{ route('home', ['locale' => app()->getLocale()]) }}">{{ __('site.errors.home') }}</a>
     </div>
   </main>
 </x-layouts.index>

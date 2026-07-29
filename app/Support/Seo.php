@@ -37,6 +37,21 @@ class Seo
         return self::baseUrl() . self::normalizePath($url);
     }
 
+    /**
+     * Resolve a public asset without rewriting an explicitly external media host.
+     * Canonical URLs use absolute() so they remain on the configured site host.
+     */
+    public static function assetUrl(?string $url): ?string
+    {
+        if (!$url) {
+            return null;
+        }
+
+        return Str::startsWith($url, ['http://', 'https://'])
+            ? $url
+            : self::baseUrl() . self::normalizePath($url);
+    }
+
     public static function route(string $name, array $parameters = []): string
     {
         $generated = route($name, $parameters, false);
@@ -124,6 +139,12 @@ class Seo
                 'areaServed' => 'UZ',
                 'availableLanguage' => ['uz', 'ru', 'en'],
             ]],
+            'openingHoursSpecification' => config('seo.opening_hours.opens') && config('seo.opening_hours.closes') ? [[
+                '@type' => 'OpeningHoursSpecification',
+                'dayOfWeek' => config('seo.opening_hours.days', []),
+                'opens' => config('seo.opening_hours.opens'),
+                'closes' => config('seo.opening_hours.closes'),
+            ]] : null,
             'knowsAbout' => [
                 ['ru' => 'Производство биологически активных добавок', 'uz' => 'Biologik faol qo‘shimchalar ishlab chiqarish', 'en' => 'Dietary supplement manufacturing'][$locale],
                 ['ru' => 'Контрактное производство', 'uz' => 'Kontrakt ishlab chiqarish', 'en' => 'Contract manufacturing'][$locale],

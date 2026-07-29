@@ -224,6 +224,71 @@ nav a:hover {
 nav a:hover::after{ transform: scaleX(0); }
 nav a:focus-visible{ outline:3px solid #f3a712; outline-offset:2px; }
 
+.site-breadcrumb {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid rgba(23, 107, 53, .10);
+  border-radius: 0;
+  background: #f8fcf8;
+}
+
+.site-breadcrumb ol {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 8px;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  list-style: none;
+  color: #52685a;
+  font-size: .875rem;
+}
+
+.site-breadcrumb li {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 8px;
+}
+
+.site-breadcrumb li:not(:last-child)::after {
+  content: "/";
+  color: #91a598;
+}
+
+.site-breadcrumb li:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.site-breadcrumb a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  padding: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #176b35;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  backdrop-filter: none;
+}
+
+.site-breadcrumb a::after { content: none; }
+.site-breadcrumb a:hover {
+  background: transparent;
+  color: #0f5228;
+  box-shadow: none;
+  transform: none;
+}
+
 /* Backdrop for mobile menu */
 .menu-backdrop {
   position: fixed;

@@ -38,7 +38,7 @@
         ? 'noindex, follow, max-image-preview:large'
         : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1');
       $canonicalUrl = \App\Support\Seo::canonical($canonical);
-      $ogImage = \App\Support\Seo::absolute($image ?: config('seo.default_image'));
+      $ogImage = \App\Support\Seo::assetUrl($image ?: config('seo.default_image'));
       try {
         $altRu = \App\Support\Seo::alternate('ru');
         $altUz = \App\Support\Seo::alternate('uz');
@@ -79,12 +79,16 @@
     <link rel="alternate" hreflang="ru-UZ" href="{{ $altRu }}" />
     <link rel="alternate" hreflang="uz-UZ" href="{{ $altUz }}" />
     <link rel="alternate" hreflang="en-UZ" href="{{ $altEn }}" />
-    <link rel="alternate" hreflang="x-default" href="{{ $altRu }}" />
+    @php
+      $defaultAlternate = ['uz' => $altUz, 'ru' => $altRu, 'en' => $altEn][config('seo.default_locale', 'uz')] ?? $altUz;
+    @endphp
+    <link rel="alternate" hreflang="x-default" href="{{ $defaultAlternate }}" />
     @if($prev)<link rel="prev" href="{{ \App\Support\Seo::absolute($prev) }}" />@endif
     @if($next)<link rel="next" href="{{ \App\Support\Seo::absolute($next) }}" />@endif
     <meta name="theme-color" content="#176b35" />
     @if(config('seo.verification.google'))<meta name="google-site-verification" content="{{ config('seo.verification.google') }}" />@endif
     @if(config('seo.verification.bing'))<meta name="msvalidate.01" content="{{ config('seo.verification.bing') }}" />@endif
+    @if(config('seo.verification.yandex'))<meta name="yandex-verification" content="{{ config('seo.verification.yandex') }}" />@endif
     <!-- Open Graph -->
     <meta property="og:type" content="{{ $ogType }}" />
     <meta property="og:site_name" content="{{ $appName }}" />
@@ -103,10 +107,11 @@
     <meta name="twitter:title" content="{{ $pageTitle }}" />
     <meta name="twitter:description" content="{{ $metaDesc }}" />
     <meta name="twitter:image" content="{{ $ogImage }}" />
-    @if($preloadImage)<link rel="preload" as="image" href="{{ \App\Support\Seo::absolute($preloadImage) }}" fetchpriority="high" />@endif
-    <link rel="icon" type="image/png" href="{{ $logoUrl }}" />
-    <link rel="apple-touch-icon" href="{{ $logoUrl }}" />
-    <link rel="shortcut icon" href="{{ $logoUrl }}" />
+    @if($preloadImage)<link rel="preload" as="image" href="{{ \App\Support\Seo::assetUrl($preloadImage) }}" fetchpriority="high" />@endif
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('img/icon-192.png') }}" />
+    <link rel="apple-touch-icon" sizes="192x192" href="{{ asset('img/icon-192.png') }}" />
+    <link rel="shortcut icon" href="{{ asset('img/icon-192.png') }}" />
+    <link rel="manifest" href="{{ asset('site.webmanifest') }}" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -168,7 +173,8 @@
           <div class="lang-menu" role="menu">
             @foreach($langOptions as $lc => $opt)
               @if($lc !== $currentLocale)
-                <a href="{{ route('locale.switch', ['locale' => $lc]) }}" role="menuitem" lang="{{ $lc }}" hreflang="{{ $lc }}">
+                @php $languageUrls = ['uz' => $altUz, 'ru' => $altRu, 'en' => $altEn]; @endphp
+                <a href="{{ $languageUrls[$lc] }}" role="menuitem" lang="{{ $lc }}" hreflang="{{ $lc }}">
                   <span style="display:inline-flex;align-items:center;gap:8px;">
                     <img src="{{ asset('img/' . $opt['flag']) }}" width="18" height="12" alt="{{ $opt['code'] }}" style="width:18px;height:12px;object-fit:cover;border-radius:2px;"> <span>{{ $opt['code'] }}</span>
                   </span>
@@ -180,6 +186,21 @@
       </div>
     </header>
     <div class="menu-backdrop" id="menuBackdrop" aria-hidden="true"></div>
+
+    @if(!request()->routeIs('home'))
+      <nav class="site-breadcrumb" aria-label="{{ __('site.common.breadcrumb') }}">
+        <ol class="container">
+          @foreach($crumbs as $crumb)
+            <li @if($loop->last) aria-current="page" @endif>
+              @if(!$loop->last)
+                @php $visibleCrumbPath = parse_url($crumb['url'], PHP_URL_PATH) ?: '/'; @endphp
+                <a href="{{ url($visibleCrumbPath) }}">{{ $crumb['name'] }}</a>
+              @else<span>{{ $crumb['name'] }}</span>@endif
+            </li>
+          @endforeach
+        </ol>
+      </nav>
+    @endif
 
     <div id="site-content" tabindex="-1">
       {{ $slot }}
@@ -235,6 +256,7 @@
               <a href="{{ route('certificates') }}">{{ __('site.common.certificates') }}</a>
               <a href="{{ route('about') }}">{{ __('О нас') }}</a>
               <a href="{{ route('contacts') }}">{{ __('Контакты') }}</a>
+              <a href="{{ route('privacy') }}">{{ __('site.common.privacy') }}</a>
             </div>
           </nav>
         </div>

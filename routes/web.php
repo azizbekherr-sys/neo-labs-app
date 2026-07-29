@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -22,15 +23,15 @@ use App\Models\Article;
 use App\Models\Certificate;
 use App\Models\CompanyFact;
 use App\Http\Controllers\SitemapController;
+use App\Support\PublicContentCache;
 
 /**
  * Helpers
  */
 $supportedLocales = ['ru', 'uz', 'en'];
-$getPreferredLocale = function () use ($supportedLocales) {
-    $loc = (string) session('locale', config('app.locale', 'ru'));
-    return in_array($loc, $supportedLocales, true) ? $loc : 'ru';
-};
+$defaultLocale = in_array(config('seo.default_locale'), $supportedLocales, true)
+    ? (string) config('seo.default_locale')
+    : 'uz';
 $pickLocalized = function ($model, string $base, string $locale) {
     $fieldByLocale = $base . '_' . $locale;
     return $model->{$fieldByLocale}
@@ -42,45 +43,49 @@ $pickLocalized = function ($model, string $base, string $locale) {
 };
 
 Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
+Route::get('/sitemaps/pages-{locale}.xml', [SitemapController::class, 'pages'])
+    ->where(['locale' => implode('|', $supportedLocales)])
+    ->name('sitemap.pages');
+Route::get('/sitemaps/products.xml', [SitemapController::class, 'products'])->name('sitemap.products');
+Route::get('/sitemaps/articles.xml', [SitemapController::class, 'articles'])->name('sitemap.articles');
 
 /**
  * Legacy URLs -> 301 to locale-prefixed URLs
  */
-Route::get('/', function (Request $request) use ($getPreferredLocale) {
-    $locale = $getPreferredLocale();
-    return redirect()->to('/' . $locale, 301);
+Route::get('/', function () use ($defaultLocale) {
+    return redirect()->to('/' . $defaultLocale, 301);
 });
-Route::get('/catalog', function () use ($getPreferredLocale) {
-    return redirect()->to('/' . $getPreferredLocale() . '/catalog', 301);
+Route::get('/catalog', function () use ($defaultLocale) {
+    return redirect()->to('/' . $defaultLocale . '/catalog', 301);
 });
-Route::get('/manufacturing', function () use ($getPreferredLocale) {
-    return redirect()->to('/' . $getPreferredLocale() . '/manufacturing', 301);
+Route::get('/manufacturing', function () use ($defaultLocale) {
+    return redirect()->to('/' . $defaultLocale . '/manufacturing', 301);
 });
-Route::get('/about', function () use ($getPreferredLocale) {
-    return redirect()->to('/' . $getPreferredLocale() . '/about', 301);
+Route::get('/about', function () use ($defaultLocale) {
+    return redirect()->to('/' . $defaultLocale . '/about', 301);
 });
-Route::get('/contacts', function () use ($getPreferredLocale) {
-    return redirect()->to('/' . $getPreferredLocale() . '/contacts', 301);
+Route::get('/contacts', function () use ($defaultLocale) {
+    return redirect()->to('/' . $defaultLocale . '/contacts', 301);
 });
-foreach (['certificates', 'production', 'editorial-policy', 'company-facts'] as $legacyPage) {
-    Route::get('/' . $legacyPage, function () use ($getPreferredLocale, $legacyPage) {
-        return redirect()->to('/' . $getPreferredLocale() . '/' . $legacyPage, 301);
+foreach (['certificates', 'production', 'editorial-policy', 'company-facts', 'privacy'] as $legacyPage) {
+    Route::get('/' . $legacyPage, function () use ($defaultLocale, $legacyPage) {
+        return redirect()->to('/' . $defaultLocale . '/' . $legacyPage, 301);
     });
 }
-Route::get('/news', function (Request $request) use ($getPreferredLocale) {
+Route::get('/news', function (Request $request) use ($defaultLocale) {
     $qs = $request->getQueryString();
-    $to = '/' . $getPreferredLocale() . '/news' . ($qs ? ('?' . $qs) : '');
+    $to = '/' . $defaultLocale . '/news' . ($qs ? ('?' . $qs) : '');
     return redirect()->to($to, 301);
 });
-Route::get('/news/{article}/{slug?}', function (Request $request, Article $article) use ($getPreferredLocale, $pickLocalized) {
-    $locale = $getPreferredLocale();
+Route::get('/news/{article}/{slug?}', function (Article $article) use ($defaultLocale, $pickLocalized) {
+    $locale = $defaultLocale;
     $title = (string) ($pickLocalized($article, 'title', $locale) ?? ('news-' . $article->id));
     $slug = Str::slug($title);
     $to = '/' . $locale . '/news/' . $article->id . '/' . $slug;
     return redirect()->to($to, 301);
 });
-Route::get('/product/{product}/{slug?}', function (Request $request, Product $product) use ($getPreferredLocale, $pickLocalized) {
-    $locale = $getPreferredLocale();
+Route::get('/product/{product}/{slug?}', function (Product $product) use ($defaultLocale, $pickLocalized) {
+    $locale = $defaultLocale;
     $name = (string) ($pickLocalized($product, 'name', $locale) ?? $product->name ?? ('product-' . $product->id));
     $slug = Str::slug($name);
     $to = '/' . $locale . '/product/' . $product->id . '/' . $slug;
@@ -199,15 +204,15 @@ Route::prefix('{locale}')
     ->group(function () use ($pickLocalized) {
         // Home
         Route::get('/', function () {
-            $products = Product::query()
+            $products = Cache::remember('public.home.products', PublicContentCache::TTL, fn () => Product::query()
                 ->where('status', 'active')
                 ->where('is_featured', true)
                 ->latest('id')
                 ->take(6)
-                ->get();
+                ->get());
 
-            $partners = Partner::query()->orderBy('id')->get();
-            $articles = Article::query()->latest('id')->take(3)->get();
+            $partners = Cache::remember('public.home.partners', PublicContentCache::TTL, fn () => Partner::query()->orderBy('id')->get());
+            $articles = Cache::remember('public.home.articles', PublicContentCache::TTL, fn () => Article::query()->latest('id')->take(3)->get());
 
             return view('welcome', compact('products', 'partners', 'articles'));
         })->name('home');
@@ -237,18 +242,21 @@ Route::prefix('{locale}')
         })->name('catalog');
 
         Route::get('/manufacturing', function () {
-            $partners = Partner::query()->orderBy('id')->get();
-            $certificates = Certificate::query()
+            $partners = Cache::remember('public.manufacturing.partners', PublicContentCache::TTL, fn () => Partner::query()->orderBy('id')->get());
+            $certificates = Cache::remember('public.manufacturing.certificates', PublicContentCache::TTL, fn () => Certificate::query()
                 ->where('is_published', true)
                 ->latest('issued_at')
-                ->get();
+                ->get());
             return view('pages.manufacturing', compact('partners', 'certificates'));
         })->name('manufacturing');
 
         Route::view('/about', 'pages.about')->name('about');
         Route::view('/contacts', 'pages.contacts')->name('contacts');
         Route::get('/certificates', function () {
-            $certificates = Certificate::query()->where('is_published', true)->latest('issued_at')->get();
+            $certificates = Cache::remember('public.certificates', PublicContentCache::TTL, fn () => Certificate::query()
+                ->where('is_published', true)
+                ->latest('issued_at')
+                ->get());
             return view('pages.certificates', compact('certificates'));
         })->name('certificates');
         Route::get('/certificates/{certificate}/{slug?}', function (string $locale, Certificate $certificate, ?string $slug = null) {
@@ -262,8 +270,12 @@ Route::prefix('{locale}')
         })->name('certificates.show');
         Route::view('/production', 'pages.production')->name('production');
         Route::view('/editorial-policy', 'pages.editorial-policy')->name('editorial-policy');
+        Route::view('/privacy', 'pages.privacy')->name('privacy');
         Route::get('/company-facts', function () {
-            $facts = CompanyFact::query()->where('is_published', true)->orderBy('key')->get();
+            $facts = Cache::remember('public.company-facts', PublicContentCache::TTL, fn () => CompanyFact::query()
+                ->where('is_published', true)
+                ->orderBy('key')
+                ->get());
             return view('pages.company-facts', compact('facts'));
         })->name('company-facts');
         Route::get('/authors/{slug}', function (string $locale, string $slug) {

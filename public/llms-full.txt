@@ -67,8 +67,11 @@ No certification status should be inferred from an empty page. Published records
 
 - Sitemap: https://neo-labs.uz/sitemap.xml
 - Short guide: https://neo-labs.uz/llms.txt
+- Privacy policy (Uzbek): https://neo-labs.uz/uz/privacy
+- Privacy policy (Russian): https://neo-labs.uz/ru/privacy
+- Privacy policy (English): https://neo-labs.uz/en/privacy
 - Company facts (Uzbek): https://neo-labs.uz/uz/company-facts
 - Company facts (Russian): https://neo-labs.uz/ru/company-facts
 - Company facts (English): https://neo-labs.uz/en/company-facts
 
-Last reviewed: 2026-07-20
+Last reviewed: 2026-07-29

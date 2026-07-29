@@ -11,7 +11,8 @@
 @foreach($url['alternates'] as $language => $alternate)
     <xhtml:link rel="alternate" hreflang="{{ $language }}" href="{{ $alternate }}" />
 @endforeach
-    <xhtml:link rel="alternate" hreflang="x-default" href="{{ $url['alternates']['ru-UZ'] }}" />
+    @php $defaultHreflang = config('seo.default_locale', 'uz') . '-UZ'; @endphp
+    <xhtml:link rel="alternate" hreflang="x-default" href="{{ $url['alternates'][$defaultHreflang] ?? (array_values($url['alternates'])[0] ?? $url['loc']) }}" />
 @if($url['image'])
     <image:image><image:loc>{{ $url['image'] }}</image:loc></image:image>
 @endif

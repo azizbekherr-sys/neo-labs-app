@@ -14,6 +14,7 @@
 - [Articles (English)](https://neo-labs.uz/en/news)
 - [Company facts (English)](https://neo-labs.uz/en/company-facts)
 - [Editorial policy (English)](https://neo-labs.uz/en/editorial-policy)
+- [Privacy policy (English)](https://neo-labs.uz/en/privacy)
 - [Contacts (English)](https://neo-labs.uz/en/contacts)
 - [XML sitemap](https://neo-labs.uz/sitemap.xml)
 - [Full machine-readable summary](https://neo-labs.uz/llms-full.txt)

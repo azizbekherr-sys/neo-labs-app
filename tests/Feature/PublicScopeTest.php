@@ -80,10 +80,26 @@ class PublicScopeTest extends TestCase
             $this->assertDoesNotMatchRegularExpression('/(?:\*\*|^#{1,6}\s)/m', $html, $path);
         }
 
-        $sitemap = $this->get('/sitemap.xml');
-        $sitemap->assertOk();
-        $this->assertSame(60, substr_count($sitemap->getContent(), '<url>'));
-        $this->assertSame(60, substr_count($sitemap->getContent(), '<loc>'));
+        $index = $this->get('/sitemap.xml');
+        $index->assertOk();
+        $this->assertSame(5, substr_count($index->getContent(), '<sitemap>'));
+
+        $sitemapContent = '';
+        foreach ([
+            '/sitemaps/pages-uz.xml',
+            '/sitemaps/pages-ru.xml',
+            '/sitemaps/pages-en.xml',
+            '/sitemaps/products.xml',
+            '/sitemaps/articles.xml',
+        ] as $sitemapPath) {
+            $child = $this->get($sitemapPath);
+            $child->assertOk();
+            $sitemapContent .= $child->getContent();
+        }
+
+        foreach ($paths as $path) {
+            $this->assertStringContainsString('https://neo-labs.uz'.$path, $sitemapContent, "Missing sitemap URL: {$path}");
+        }
     }
 
     public function test_public_contact_form_validation_has_no_external_side_effect(): void

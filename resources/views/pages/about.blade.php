@@ -1,6 +1,6 @@
 @php
   $aboutTitle = __('site.about.title');
-  $aboutDescription = config('seo.descriptions.' . \App\Support\Seo::locale());
+  $aboutDescription = __('site.about.description');
 @endphp
 <x-layouts.index :title="$aboutTitle" :description="$aboutDescription" image="/img/neo-labs-og.jpg" preload-image="/img/aboutbg.png">
   <main style="background:#ffffff;">
@@ -97,6 +97,7 @@
       </div>
     </section>
   </main>
+  <x-faq :items="__('site.about.faq')" />
 </x-layouts.index>
 
 

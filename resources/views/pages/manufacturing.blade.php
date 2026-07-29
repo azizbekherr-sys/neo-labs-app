@@ -336,4 +336,5 @@
       </div>
     </section>
   </main>
+  <x-faq :items="__('site.manufacturing.faq')" />
 </x-layouts.index>

@@ -27,6 +27,9 @@
   $metaDescription = \App\Support\Content::excerpt($metaSource ?: $shortDescription ?: $disclaimer, 155);
 
   $formValue = trim((string) ($pick('form') ?: $product->form));
+  $typeParts = preg_split('/,\s*/u', $type, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+  $seoQualifier = \App\Support\Content::excerpt($formValue ?: (end($typeParts) ?: $type), 40);
+  $autoSeoTitle = $name . (($seoQualifier && mb_strtolower($seoQualifier) !== mb_strtolower($name)) ? ' — ' . $seoQualifier : '');
   $packageValue = trim((string) ($pick('packaging_count') ?: $product->package));
   $shelfLife = trim((string) $pick('shelf_life'));
   $registration = trim((string) $pick('registration_info'));
@@ -120,7 +123,7 @@
 @endphp
 
 <x-layouts.index
-  :title="($product->seo_override ? $pick('seo_title') : null) ?: $name"
+  :title="($product->seo_override ? $pick('seo_title') : null) ?: $autoSeoTitle"
   :description="$metaDescription"
   :image="($product->seo_override ? $product->og_image : null) ?: $primaryMedia['fallback']"
   :canonical="$canonical"
@@ -136,14 +139,6 @@
 
   <main class="content-page product-detail has-sticky-cta" id="main-content">
     <div class="container">
-      <nav class="product-breadcrumb" aria-label="Breadcrumb">
-        <ol>
-          <li><a href="{{ route('home') }}">{{ __('site.common.home') }}</a></li>
-          <li><a href="{{ route('catalog') }}">{{ __('content.catalog.title') }}</a></li>
-          <li aria-current="page">{{ $name }}</li>
-        </ol>
-      </nav>
-
       <article>
         <section class="product-intro" aria-labelledby="product-title">
           <div class="product-gallery" data-product-gallery>

@@ -40,9 +40,10 @@ class SeoTest extends TestCase
         $response = $this->get('/ru');
 
         $response->assertOk()
-            ->assertSee('/locale/uz', false)
-            ->assertDontSee('/locale/ru?uz', false)
-            ->assertSee('/locale/en', false);
+            ->assertSee('href="https://neo-labs.uz/uz" role="menuitem"', false)
+            ->assertSee('href="https://neo-labs.uz/en" role="menuitem"', false)
+            ->assertDontSee('/locale/uz', false)
+            ->assertDontSee('/locale/en', false);
 
         $this->from('/ru/catalog?q=vitamin')
             ->get('/locale/uz')
@@ -91,6 +92,55 @@ class SeoTest extends TestCase
             ->assertSee('Vitamin C');
     }
 
+    public function test_same_name_product_variants_get_unique_localized_titles(): void
+    {
+        $capsules = Product::create([
+            'name' => 'FERFOLAS',
+            'name_uz' => 'FERFOLAS',
+            'name_ru' => 'ФЕРФОЛАС',
+            'name_en' => 'FERFOLAS',
+            'type_uz' => 'Biologik faol qo‘shimcha, kapsulalar',
+            'type_ru' => 'Биологически активная добавка, капсулы',
+            'type_en' => 'Dietary supplement, capsules',
+            'status' => 'active',
+        ]);
+        $solution = Product::create([
+            'name' => 'FERFOLAS',
+            'name_uz' => 'FERFOLAS',
+            'name_ru' => 'ФЕРФОЛАС',
+            'name_en' => 'FERFOLAS',
+            'type_uz' => 'Biologik faol qo‘shimcha, ichish uchun eritma',
+            'type_ru' => 'Биологически активная добавка, раствор для приема внутрь',
+            'type_en' => 'Dietary supplement, oral solution',
+            'status' => 'active',
+        ]);
+
+        $capsuleHtml = $this->get("/uz/product/{$capsules->id}/ferfolas")->assertOk()->getContent();
+        $solutionHtml = $this->get("/uz/product/{$solution->id}/ferfolas")->assertOk()->getContent();
+        preg_match('/<title>(.*?)<\/title>/s', $capsuleHtml, $capsuleTitle);
+        preg_match('/<title>(.*?)<\/title>/s', $solutionHtml, $solutionTitle);
+
+        $this->assertNotSame($capsuleTitle[1], $solutionTitle[1]);
+        $this->assertStringContainsString('kapsulalar', $capsuleTitle[1]);
+        $this->assertStringContainsString('eritma', $solutionTitle[1]);
+    }
+
+    public function test_public_home_cache_is_invalidated_when_content_changes(): void
+    {
+        $this->get('/uz')->assertOk()->assertDontSee('CACHE-REFRESH-PRODUCT');
+
+        Product::create([
+            'name' => 'CACHE-REFRESH-PRODUCT',
+            'name_uz' => 'CACHE-REFRESH-PRODUCT',
+            'name_ru' => 'CACHE-REFRESH-PRODUCT',
+            'name_en' => 'CACHE-REFRESH-PRODUCT',
+            'status' => 'active',
+            'is_featured' => true,
+        ]);
+
+        $this->get('/uz')->assertOk()->assertSee('CACHE-REFRESH-PRODUCT');
+    }
+
     public function test_public_pages_keep_the_live_site_visual_structure(): void
     {
         $this->get('/ru')
@@ -100,7 +150,8 @@ class SeoTest extends TestCase
             ->assertSee('<span>Каждого</span>', false)
             ->assertSee('src="img/untitled.png"', false)
             ->assertSee('Чем помогают наши БАД-средства?')
-            ->assertDontSee('class="seo-faq"', false);
+            ->assertSee('class="seo-faq"', false)
+            ->assertSee('"@type":"FAQPage"', false);
 
         $this->get('/ru/about')
             ->assertOk()
@@ -270,10 +321,17 @@ class SeoTest extends TestCase
             'reviewer_name' => 'Анна Врач', 'reviewer_role_ru' => 'Врач', 'reviewed_at' => now(),
             'references_ru' => ['https://www.who.int/'], 'schema_type' => 'BlogPosting',
             'references_en' => ['https://www.who.int/'],
+            'photo' => 'https://media.example.test/articles/verified.jpg',
         ]);
 
         $response = $this->get('/ru/news/' . $article->id . '/proverennaya-statya');
-        $response->assertOk()->assertSee('Иван Иванов')->assertSee('Анна Врач')->assertSee('https://www.who.int/');
+        $response->assertOk()
+            ->assertSee('Иван Иванов')
+            ->assertSee('Анна Врач')
+            ->assertSee('https://www.who.int/')
+            ->assertSee('property="og:image" content="https://media.example.test/articles/verified.jpg"', false)
+            ->assertSee('rel="preload" as="image" href="https://media.example.test/articles/verified.jpg"', false)
+            ->assertDontSee('https://neo-labs.uz/articles/verified.jpg', false);
         $schema = $this->firstJsonLd($response->getContent());
         $node = collect($schema['@graph'])->firstWhere('@type', 'BlogPosting');
         $this->assertSame('Иван Иванов', $node['author']['name']);
@@ -291,13 +349,71 @@ class SeoTest extends TestCase
             'name' => 'Test', 'name_ru' => 'Тест', 'name_uz' => 'Test',
             'status' => 'active', 'images' => ['products/test.webp'],
         ]);
-        $response = $this->get('/sitemap.xml');
+        $index = $this->get('/sitemap.xml');
+        $index->assertOk()->assertHeader('Content-Type', 'application/xml; charset=UTF-8')
+            ->assertSee('<sitemapindex', false)
+            ->assertSee('https://neo-labs.uz/sitemaps/pages-uz.xml', false)
+            ->assertSee('https://neo-labs.uz/sitemaps/products.xml', false)
+            ->assertSee('https://neo-labs.uz/sitemaps/articles.xml', false)
+            ->assertDontSee('localhost');
+        $this->assertNotFalse(simplexml_load_string($index->getContent()));
+
+        $response = $this->get('/sitemaps/products.xml');
         $response->assertOk()->assertHeader('Content-Type', 'application/xml; charset=UTF-8')
-            ->assertSee('https://neo-labs.uz/ru', false)
+            ->assertSee('https://neo-labs.uz/ru/product/', false)
             ->assertSee('hreflang="uz-UZ"', false)
+            ->assertSee('hreflang="x-default" href="https://neo-labs.uz/uz/product/', false)
             ->assertSee('<image:image>', false)
             ->assertDontSee('localhost');
         $this->assertNotFalse(simplexml_load_string($response->getContent()));
+    }
+
+    public function test_legacy_root_unknown_urls_manifest_privacy_and_global_breadcrumbs(): void
+    {
+        $this->get('/')->assertStatus(301)->assertRedirect('/uz');
+        $this->get('/catalog')->assertStatus(301)->assertRedirect('/uz/catalog');
+
+        $this->get('/not-found-seo-audit')
+            ->assertNotFound()
+            ->assertSee('content="noindex, nofollow"', false);
+        $this->get('/ru/not-found-seo-audit')
+            ->assertNotFound()
+            ->assertSee('<html lang="ru">', false);
+
+        foreach (['uz', 'ru', 'en'] as $locale) {
+            $this->get("/{$locale}/privacy")
+                ->assertOk()
+                ->assertSee('<article class="container policy-page">', false)
+                ->assertSee('<link rel="canonical"', false);
+        }
+
+        $this->get('/uz/catalog')
+            ->assertOk()
+            ->assertSee('class="site-breadcrumb"', false)
+            ->assertSee('aria-current="page"', false)
+            ->assertSee('<link rel="manifest" href="https://neo-labs.uz/site.webmanifest"', false);
+
+        $this->assertFileExists(public_path('site.webmanifest'));
+        $manifest = json_decode(file_get_contents(public_path('site.webmanifest')), true);
+        $this->assertSame('/uz', $manifest['start_url']);
+        $this->assertFileExists(public_path('img/icon-192.png'));
+        $this->assertFileExists(public_path('img/icon-512.png'));
+    }
+
+    public function test_organization_schema_has_opening_hours_and_uzbek_x_default(): void
+    {
+        $response = $this->get('/en');
+        $response->assertOk()
+            ->assertSee('hreflang="x-default" href="https://neo-labs.uz/uz"', false);
+
+        $schema = $this->firstJsonLd($response->getContent());
+        $organization = collect($schema['@graph'])->first(function (array $node) {
+            return in_array('Organization', (array) ($node['@type'] ?? []), true);
+        });
+        $hours = $organization['openingHoursSpecification'][0];
+        $this->assertSame('OpeningHoursSpecification', $hours['@type']);
+        $this->assertSame('09:00', $hours['opens']);
+        $this->assertSame('18:00', $hours['closes']);
     }
 
     public function test_filtered_results_are_noindex_and_canonical_has_no_search_query(): void
@@ -310,7 +426,7 @@ class SeoTest extends TestCase
 
     public function test_all_company_routes_render_in_all_languages_with_one_canonical(): void
     {
-        foreach (['about','certificates','production','editorial-policy','company-facts','manufacturing','contacts'] as $path) {
+        foreach (['about','certificates','production','editorial-policy','company-facts','manufacturing','contacts','privacy'] as $path) {
             foreach (['ru','uz','en'] as $locale) {
                 $response = $this->get("/{$locale}/{$path}");
                 $response->assertOk()->assertDontSee('APP_NAME=Laravel');
@@ -336,6 +452,10 @@ class SeoTest extends TestCase
         $this->get('/en/certificates/'.$certificate->id.'/test-certificate')
             ->assertOk()
             ->assertSee('Organization');
+        $this->get('/sitemaps/pages-en.xml')
+            ->assertOk()
+            ->assertSee('https://neo-labs.uz/en/certificates/'.$certificate->id.'/test-certificate', false)
+            ->assertSee('hreflang="uz-UZ" href="https://neo-labs.uz/uz/certificates/'.$certificate->id.'/test-sertifikati"', false);
     }
 
     public function test_private_routes_send_noindex_header(): void

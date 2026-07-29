@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'common'=>['home'=>'Bosh sahifa','products'=>'Mahsulotlar','articles'=>'Maqolalar','certificates'=>'Sertifikatlar','company_facts'=>'Kompaniya faktlari','faq_title'=>'Ko‘p so‘raladigan savollar','skip_to_content'=>'Kontentga o‘tish','menu_open'=>'Menyuni ochish','menu_close'=>'Menyuni yopish'],
+    'common'=>['home'=>'Bosh sahifa','products'=>'Mahsulotlar','articles'=>'Maqolalar','certificates'=>'Sertifikatlar','company_facts'=>'Kompaniya faktlari','privacy'=>'Maxfiylik','breadcrumb'=>'Sahifa yo‘li','faq_title'=>'Ko‘p so‘raladigan savollar','skip_to_content'=>'Kontentga o‘tish','menu_open'=>'Menyuni ochish','menu_close'=>'Menyuni yopish'],
     'footer'=>[
         'brand_description'=>'NEO-LABS — Toshkentda biologik faol qo‘shimchalar ishlab chiqaruvchi va kontrakt ishlab chiqarish xizmatlarini ko‘rsatuvchi kompaniya.',
         'contact_title'=>'Aloqa',
@@ -25,7 +25,7 @@ return [
         ],
     ],
     'about'=>[
-        'title'=>'NEO-LABS kompaniyasi haqida','legal_name_display'=>'«NEO‑LABS» MChJ','production_site_alt'=>'NEO-LABS ishlab chiqarish hududi','production_process_alt'=>'NEO-LABS ishlab chiqarish jarayoni','packaging_line_alt'=>'NEO-LABS qadoqlash liniyasi','equipment_alt'=>'NEO-LABS ishlab chiqarish uskunalari','transparency_title'=>'Tasdiqlangan ma’lumotlar va ochiqlik','transparency_text'=>'Sertifikatlar, rahbariyat, xodimlar soni, hamkorlik va kompaniya natijalari faqat administrator tasdiqlovchi manba bilan e’lon qilganidan keyin ko‘rsatiladi.','check_certificates'=>'Sertifikatlarni tekshirish','company_facts'=>'Kompaniya faktlari',
+        'title'=>'NEO-LABS kompaniyasi haqida','description'=>'NEO-LABS tarixi, Toshkentdagi ishlab chiqarish faoliyati, kompaniya ma’lumotlari va tasdiqlovchi hujjatlarga havolalar.','legal_name_display'=>'«NEO‑LABS» MChJ','production_site_alt'=>'NEO-LABS ishlab chiqarish hududi','production_process_alt'=>'NEO-LABS ishlab chiqarish jarayoni','packaging_line_alt'=>'NEO-LABS qadoqlash liniyasi','equipment_alt'=>'NEO-LABS ishlab chiqarish uskunalari','transparency_title'=>'Tasdiqlangan ma’lumotlar va ochiqlik','transparency_text'=>'Sertifikatlar, rahbariyat, xodimlar soni, hamkorlik va kompaniya natijalari faqat administrator tasdiqlovchi manba bilan e’lon qilganidan keyin ko‘rsatiladi.','check_certificates'=>'Sertifikatlarni tekshirish','company_facts'=>'Kompaniya faktlari',
         'faq'=>[
             ['question'=>'NEO-LABS qanday kompaniya?','answer'=>'NEO-LABS — Toshkentda biologik faol qo‘shimchalar ishlab chiqaruvchi va kontrakt ishlab chiqarish xizmatlarini ko‘rsatuvchi kompaniya.'],
             ['question'=>'NEO-LABS qachon tashkil etilgan?','answer'=>'Saytda e’lon qilingan ma’lumotga ko‘ra, korxona 2020-yil 25-iyunda tashkil etilgan.'],
@@ -42,6 +42,26 @@ return [
     ],
     'editorial'=>[
         'title'=>'Tahririyat siyosati','description'=>'NEO-LABS saytidagi maqolalarni tayyorlash, manbalarni tanlash, ekspert tekshiruvi va xatolarni tuzatish tamoyillari.','preparation_title'=>'Maqolalar qanday tayyorlanadi','preparation_text'=>'Maqola mavzusi va matni administrator tomonidan kiritiladi. Chop etishdan oldin faktlar, sana, mahsulot nomlari va havolalar tekshirilishi kerak.','sources_title'=>'Manbalar','sources_text'=>'Ustuvor manbalar — rasmiy davlat va sog‘liqni saqlash organlari, ilmiy nashrlar, ishlab chiqaruvchi hujjatlari hamda aniq ko‘rsatilgan birlamchi manbalar. Har bir foydalanilgan manba maqola sahifasida ko‘rinadi.','review_title'=>'Tibbiy ekspertiza','review_text'=>'Reviewer faqat maqolani real mutaxassis ko‘rib chiqqanida, uning ismi, lavozimi va tekshirish sanasi bilan ko‘rsatiladi. Tekshiruv bo‘lmasa reviewer maydoni va reviewedBy schema chiqarilmaydi.','corrections_title'=>'Tuzatishlar','corrections_text'=>'Aniqlangan xato tekshiriladi, maqola tuzatiladi va yangilangan sana o‘zgartiriladi. Muhim tibbiy yoki xavfsizlik xatosi imkon qadar tez tuzatiladi.','advertising_title'=>'Reklama va homiylik','advertising_text'=>'Reklama yoki homiylik bo‘lsa, u o‘quvchiga aniq belgilanishi kerak. Tijorat hamkorligi tahririyat materialida tasdiqlanmagan tibbiy da’volar berishga asos bo‘lmaydi.','disclaimer'=>'Tibbiy ogohlantirish: sayt materiallari umumiy ma’lumot uchun mo‘ljallangan va shifokor maslahatini, tashxis yoki davolashni almashtirmaydi.',
+    ],
+    'privacy'=>[
+        'title'=>'Maxfiylik siyosati',
+        'description'=>'NEO-LABS saytida aloqa ma’lumotlari, texnik ma’lumotlar va cookie fayllari qanday ishlatilishi haqida ma’lumot.',
+        'intro'=>'Ushbu sahifa NEO-LABS sayti orqali yuborilgan ma’lumotlar qanday qayta ishlanishini tushuntiradi.',
+        'data_title'=>'Qanday ma’lumotlar olinadi',
+        'data_text'=>'Aloqa shakli orqali ism, telefon yoki boshqa aloqa ma’lumoti, kompaniya nomi, mahsulot turi va xabar matni olinishi mumkin. Xavfsizlik va spamdan himoya qilish uchun IP manzil hamda murojaat yuborilgan sahifa saqlanishi mumkin.',
+        'use_title'=>'Ma’lumotlardan foydalanish',
+        'use_text'=>'Ma’lumotlar so‘rovga javob berish, kontrakt ishlab chiqarish talabini ko‘rib chiqish, murojaat holatini boshqarish va sayt xavfsizligini ta’minlash uchun ishlatiladi.',
+        'processors_title'=>'Xizmat ko‘rsatuvchilar',
+        'processors_text'=>'Sayt ishlashi uchun hosting, ma’lumotlar bazasi va xabar yetkazish xizmatlaridan foydalanilishi mumkin. Ularga faqat xizmatni bajarish uchun zarur ma’lumot uzatiladi.',
+        'cookies_title'=>'Cookie va sessiya',
+        'cookies_text'=>'Sayt til tanlovi, forma xavfsizligi va sessiya ishlashi uchun zarur cookie fayllaridan foydalanadi. Sayt reklama profilingi uchun cookie ishlatishini e’lon qilmaydi.',
+        'retention_title'=>'Saqlash muddati',
+        'retention_text'=>'Murojaatlar ularga javob berish, xizmat sifatini nazorat qilish va qonuniy majburiyatlarni bajarish uchun zarur bo‘lgan muddat davomida saqlanadi.',
+        'rights_title'=>'Sizning tanlovingiz',
+        'rights_text'=>'O‘zingiz yuborgan aloqa ma’lumotlarini aniqlashtirish, tuzatish yoki o‘chirish masalasida kompaniyaga murojaat qilishingiz mumkin.',
+        'contact_title'=>'Maxfiylik bo‘yicha aloqa',
+        'contact_text'=>'Savollar yoki ma’lumotlar bo‘yicha murojaatlar uchun email:',
+        'updated'=>'So‘nggi yangilanish: 29-iyul, 2026-yil.',
     ],
     'contacts'=>['title'=>'NEO-LABS bilan bog‘lanish','description'=>'NEO-LABS telefonlari, email, Toshkentdagi joylashuvi va kontrakt ishlab chiqarish uchun aloqa shakli.','success'=>'Xabaringiz yuborildi! Tez orada bog‘lanamiz.','error'=>'Xabar yuborilmadi. Keyinroq urinib ko‘ring.','not_configured'=>'Xabar yuborish xizmati sozlanmagan.'],
     'manufacturing'=>[
