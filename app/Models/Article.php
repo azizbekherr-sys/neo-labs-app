@@ -26,6 +26,12 @@ class Article extends Model
         'reviewer_name', 'reviewer_role_uz', 'reviewer_role_ru', 'reviewer_role_en', 'reviewed_at',
         'references_uz', 'references_ru', 'references_en',
         'faqs_uz', 'faqs_ru', 'faqs_en', 'schema_type',
+        'slug_uz', 'slug_ru', 'slug_en',
+        'focus_keyword_uz', 'focus_keyword_ru', 'focus_keyword_en',
+        'keywords_uz', 'keywords_ru', 'keywords_en',
+        'og_title_uz', 'og_title_ru', 'og_title_en',
+        'og_description_uz', 'og_description_ru', 'og_description_en',
+        'image_alt_uz', 'image_alt_ru', 'image_alt_en',
     ];
 
     protected $casts = [
@@ -37,6 +43,9 @@ class Article extends Model
         'faqs_uz' => 'array',
         'faqs_ru' => 'array',
         'faqs_en' => 'array',
+        'keywords_uz' => 'array',
+        'keywords_ru' => 'array',
+        'keywords_en' => 'array',
     ];
 }
 

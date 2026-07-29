@@ -58,6 +58,185 @@ class AiContentService
         return $this->normalizeArticle($data);
     }
 
+    // ============================================================= NEW: stepwise
+    // Each step below is an INDEPENDENT AI request so the admin UI can run and
+    // re-run them one at a time (import → translate → SEO), each with its own
+    // loading state. None of them auto-publish; results land in the editor.
+
+    /**
+     * STEP 1 — Import & professionally edit a source article.
+     *
+     * Detects the source language (uz|ru|en) and returns a cleaned, original,
+     * professionally rewritten article IN THAT SAME LANGUAGE ONLY (no translation
+     * yet). Advertising, other brands/clinics/pharmacies, "buy this drug" CTAs,
+     * outbound links and site names are stripped; the medical substance is kept.
+     *
+     * @return array{lang:string,title:string,body:string}
+     */
+    public function importArticle(string $sourceText): array
+    {
+        $system = $this->importSystemPrompt();
+        $user = $this->importUserPrompt($sourceText);
+        $schema = [
+            'type' => 'object',
+            'additionalProperties' => false,
+            'properties' => [
+                'lang' => ['type' => 'string', 'enum' => ['uz', 'ru', 'en']],
+                'title' => ['type' => 'string'],
+                'body' => ['type' => 'string'],
+            ],
+            'required' => ['lang', 'title', 'body'],
+        ];
+
+        $data = $this->dispatch($system, $user, 24000, 170, $schema);
+
+        $lang = strtolower(trim((string) ($data['lang'] ?? 'ru')));
+        if (!in_array($lang, self::LOCALES, true)) {
+            $lang = 'ru';
+        }
+
+        return [
+            'lang' => $lang,
+            'title' => trim((string) ($data['title'] ?? '')),
+            'body' => trim((string) ($data['body'] ?? '')),
+        ];
+    }
+
+    /**
+     * STEP 2 — Translate one filled language into the other two.
+     *
+     * @return array<string,array{title:string,body:string}> keyed by target locale
+     */
+    public function translateArticle(string $sourceLang, string $title, string $bodyHtml): array
+    {
+        $sourceLang = in_array($sourceLang, self::LOCALES, true) ? $sourceLang : 'uz';
+        $targets = array_values(array_diff(self::LOCALES, [$sourceLang]));
+
+        $system = $this->translateSystemPrompt();
+        $user = $this->translateUserPrompt($sourceLang, $targets, $title, $bodyHtml);
+        $schema = [
+            'type' => 'object',
+            'additionalProperties' => false,
+            'properties' => array_merge(...array_map(fn ($loc) => [
+                $loc => [
+                    'type' => 'object',
+                    'additionalProperties' => false,
+                    'properties' => ['title' => ['type' => 'string'], 'body' => ['type' => 'string']],
+                    'required' => ['title', 'body'],
+                ],
+            ], $targets)),
+            'required' => $targets,
+        ];
+
+        $data = $this->dispatch($system, $user, 32000, 180, $schema);
+
+        $out = [];
+        foreach ($targets as $loc) {
+            $out[$loc] = [
+                'title' => trim((string) ($data[$loc]['title'] ?? '')),
+                'body' => trim((string) ($data[$loc]['body'] ?? '')),
+            ];
+        }
+        return $out;
+    }
+
+    /**
+     * STEP 3 — Generate a full SEO package for every filled locale.
+     *
+     * @param  array<string,array{title:string,body:string}>  $filled
+     * @return array<string,array<string,mixed>>  seo fields keyed by locale
+     */
+    public function generateArticleSeo(array $filled): array
+    {
+        $locales = array_values(array_filter(array_keys($filled), fn ($l) => in_array($l, self::LOCALES, true)));
+        if (!$locales) {
+            throw new RuntimeException('SEO uchun avval maqola matnini to‘ldiring.');
+        }
+
+        $system = $this->seoSystemPrompt();
+        $user = $this->seoUserPrompt($filled, $locales);
+
+        $fieldProps = [
+            'seo_title' => ['type' => 'string'],
+            'meta_description' => ['type' => 'string'],
+            'slug' => ['type' => 'string'],
+            'focus_keyword' => ['type' => 'string'],
+            'keywords' => ['type' => 'array', 'items' => ['type' => 'string']],
+            'og_title' => ['type' => 'string'],
+            'og_description' => ['type' => 'string'],
+            'schema_description' => ['type' => 'string'],
+            'image_alt' => ['type' => 'string'],
+        ];
+        $schema = [
+            'type' => 'object',
+            'additionalProperties' => false,
+            'properties' => array_merge(...array_map(fn ($loc) => [
+                $loc => [
+                    'type' => 'object',
+                    'additionalProperties' => false,
+                    'properties' => $fieldProps,
+                    'required' => array_keys($fieldProps),
+                ],
+            ], $locales)),
+            'required' => $locales,
+        ];
+
+        $data = $this->dispatch($system, $user, 8000, 120, $schema);
+
+        $out = [];
+        foreach ($locales as $loc) {
+            $row = is_array($data[$loc] ?? null) ? $data[$loc] : [];
+            $kw = $row['keywords'] ?? [];
+            $out[$loc] = [
+                'seo_title' => trim((string) ($row['seo_title'] ?? '')),
+                'meta_description' => trim((string) ($row['meta_description'] ?? '')),
+                'slug' => \Illuminate\Support\Str::slug((string) ($row['slug'] ?? '')),
+                'focus_keyword' => trim((string) ($row['focus_keyword'] ?? '')),
+                'keywords' => is_array($kw)
+                    ? array_values(array_filter(array_map(fn ($v) => trim((string) $v), $kw)))
+                    : array_values(array_filter(array_map('trim', explode(',', (string) $kw)))),
+                'og_title' => trim((string) ($row['og_title'] ?? '')),
+                'og_description' => trim((string) ($row['og_description'] ?? '')),
+                'schema_description' => trim((string) ($row['schema_description'] ?? '')),
+                'image_alt' => trim((string) ($row['image_alt'] ?? '')),
+            ];
+        }
+        return $out;
+    }
+
+    /**
+     * STEP 4 helper — 2–4 English stock-photo keywords for an article's topic.
+     */
+    public function imageQuery(string $title, string $bodyHtml): string
+    {
+        $system = "You output 2–4 English keywords describing a suitable, non-branded stock photo for a health & wellness article (e.g. \"healthy breakfast vegetables\", \"woman doing yoga\"). No brand names, no text, no logos, no specific real people. Return ONLY a JSON object {\"image_query\":\"...\"}.";
+        $user = "TITLE: " . trim($title) . "\n\nARTICLE (excerpt): " . \Illuminate\Support\Str::limit(strip_tags($bodyHtml), 1200, '');
+        $schema = [
+            'type' => 'object',
+            'additionalProperties' => false,
+            'properties' => ['image_query' => ['type' => 'string']],
+            'required' => ['image_query'],
+        ];
+        try {
+            // 2000 tokens: gemini-flash spends part of the budget on "thinking",
+            // so a tiny cap would truncate the JSON before it is emitted.
+            $data = $this->dispatch($system, $user, 2000, 45, $schema);
+            return trim((string) ($data['image_query'] ?? ''));
+        } catch (\Throwable $e) {
+            // Non-fatal: the caller falls back to a title-derived query.
+            return '';
+        }
+    }
+
+    /** Provider-agnostic single call. Gemini ignores $schema; Anthropic enforces it. */
+    private function dispatch(string $system, string $user, int $maxTokens, int $timeout, array $schema): array
+    {
+        $provider = (string) config('services.ai.provider', 'gemini');
+        return $provider === 'anthropic'
+            ? $this->callAnthropic($system, $user, $schema, $maxTokens, $timeout)
+            : $this->callGemini($system, $user, $maxTokens, $timeout);
+    }
+
     // ---------------------------------------------------------------- Gemini
 
     private function callGemini(string $system, string $user, int $maxTokens = 8000, int $timeout = 90): array
@@ -259,6 +438,82 @@ TXT;
         return "TASK: Rewrite the ENTIRE source article below into an original article (do not copy it verbatim) for uz, ru and en, plus an image_query for a matching stock photo.\n"
             . "You MUST carry over ALL of the information from the source: every section, heading, paragraph, fact, number, statistic, name, quote, list, step, example and recommendation. Do not summarize, shorten or omit anything — the result must be at least as complete and detailed as the source. Reword and restructure, but keep 100% of the content.\n\n"
             . "SOURCE ARTICLE:\n" . trim((string) $sourceText);
+    }
+
+    // ------------------------------------------------- Stepwise prompts (new)
+
+    /** Shared editorial-safety rules for medical/health content. */
+    private function safetyRules(): string
+    {
+        return <<<'TXT'
+EDITORIAL & SAFETY RULES (mandatory):
+- Remove ALL advertising: promotional copy, other websites' names, outbound links, referral/affiliate text, "read more on X", social calls-to-action.
+- Remove promotion of specific brands, clinics, pharmacies, shops or paid services, and any sentence that pushes the reader to BUY a particular medicine or product.
+- Do NOT give a medical diagnosis, do NOT prescribe a treatment plan, and do NOT promote prescription-only drugs.
+- Keep the article INFORMATIONAL. Do not claim anything "cures", "treats" or "prevents" disease.
+- Preserve the source's medical and factual substance: keep every symptom, cause, mechanism, recommendation, dosage-of-nutrient, statistic and fact that is genuinely informative.
+- NEVER invent facts, numbers, studies, citations, dates or names that are not in the source. If the source doesn't state it, don't write it.
+- Rewrite in your own words — clean, professional, grammatically correct, easy to read. Never copy the source text verbatim; never plagiarize.
+TXT;
+    }
+
+    private function importSystemPrompt(): string
+    {
+        return "You are a senior medical-content editor for NEO-LABS, a health & wellness brand in Uzbekistan (languages: Uzbek uz [Latin], Russian ru, English en).\n\n"
+            . "Your job: take ONE source article and return a cleaned, professionally re-edited, ORIGINAL version IN ITS OWN ORIGINAL LANGUAGE ONLY. Do NOT translate it to another language.\n\n"
+            . "LANGUAGE DETECTION: detect the source language. Set \"lang\" to \"uz\", \"ru\" or \"en\". If the source is written in some OTHER language, translate it into Russian and set \"lang\":\"ru\".\n\n"
+            . $this->safetyRules() . "\n\n"
+            . "OUTPUT:\n"
+            . "- Return ONLY a JSON object: {\"lang\":\"uz|ru|en\", \"title\":\"...\", \"body\":\"...\"}.\n"
+            . "- \"title\": a clear, engaging title (≤ 100 chars) in the detected language.\n"
+            . "- \"body\": the full article as clean semantic HTML using <h2>, <h3>, <p>, <ul>, <li>, <strong> only (no <html>/<body>, no inline styles, no <img>, no <a>). Keep the source's sections and depth — do not summarize away real information.\n"
+            . "- Uzbek uses the Latin alphabet (o‘, g‘, sh, ch).";
+    }
+
+    private function importUserPrompt(string $sourceText): string
+    {
+        return "Clean, professionally edit and rewrite the SOURCE ARTICLE below in its own language. Keep all genuine information; remove all advertising/brand/purchase content per the rules.\n\nSOURCE ARTICLE:\n" . trim($sourceText);
+    }
+
+    private function translateSystemPrompt(): string
+    {
+        return "You are a professional medical translator for NEO-LABS (uz [Latin], ru, en). You translate health articles naturally — never word-for-word — keeping medical terminology correct and the author's tone and structure.\n\n"
+            . "RULES:\n"
+            . "- Return ONLY a JSON object whose keys are the requested target locales; each value is {\"title\":\"...\", \"body\":\"...\"}.\n"
+            . "- Translate the FULL article — every heading, paragraph and list item. Do not shorten, summarize or drop content.\n"
+            . "- Keep the body as the same clean semantic HTML (<h2>,<h3>,<p>,<ul>,<li>,<strong>) with the same structure.\n"
+            . "- Natural, idiomatic, grammatically correct. Preserve medical terms accurately. Do not add facts or advertising.\n"
+            . "- Uzbek uses the Latin alphabet (o‘, g‘, sh, ch).";
+    }
+
+    private function translateUserPrompt(string $sourceLang, array $targets, string $title, string $bodyHtml): string
+    {
+        $names = ['uz' => 'Uzbek (Latin)', 'ru' => 'Russian', 'en' => 'English'];
+        $targetList = implode(' and ', array_map(fn ($t) => "\"{$t}\" ({$names[$t]})", $targets));
+        return "SOURCE LANGUAGE: {$names[$sourceLang]}.\nTRANSLATE INTO: {$targetList}.\nReturn a JSON object with exactly these keys: " . implode(', ', array_map(fn ($t) => "\"{$t}\"", $targets)) . ".\n\n"
+            . "SOURCE TITLE:\n" . trim($title) . "\n\nSOURCE BODY (HTML):\n" . trim($bodyHtml);
+    }
+
+    private function seoSystemPrompt(): string
+    {
+        return "You are an SEO specialist for NEO-LABS health articles (uz [Latin], ru, en). From a finished article you produce a complete SEO package, PER LANGUAGE, in that same language.\n\n"
+            . "RULES:\n"
+            . "- Return ONLY a JSON object keyed by the requested locales; each value is an SEO object.\n"
+            . "- Each SEO object has: \"seo_title\" (~50–60 chars, compelling), \"meta_description\" (~140–160 chars), \"slug\" (short, lowercase, Latin letters and hyphens only — even for uz/ru), \"focus_keyword\" (the single main keyword), \"keywords\" (array of 5–8 relevant keywords), \"og_title\", \"og_description\", \"schema_description\" (1–2 plain-text sentences), \"image_alt\" (a short descriptive ALT text for the article's main photo).\n"
+            . "- Everything except \"slug\" must be written in the SAME language as that locale's article. Keep it directly relevant to the article topic; never invent facts or medical claims.";
+    }
+
+    private function seoUserPrompt(array $filled, array $locales): string
+    {
+        $blocks = [];
+        foreach ($locales as $loc) {
+            $title = trim((string) ($filled[$loc]['title'] ?? ''));
+            $body = trim((string) ($filled[$loc]['body'] ?? ''));
+            // SEO doesn't need the whole body — a generous excerpt is plenty.
+            $body = \Illuminate\Support\Str::limit(strip_tags($body), 3000, '');
+            $blocks[] = "=== LOCALE {$loc} ===\nTITLE: {$title}\nARTICLE: {$body}";
+        }
+        return "Produce the SEO package for these locales: " . implode(', ', $locales) . ".\n\n" . implode("\n\n", $blocks);
     }
 
     private function pickArticleContext(array $fields): array

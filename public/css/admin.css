@@ -414,3 +414,79 @@ details > summary::-webkit-details-marker { display: none; }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }
 }
+
+/* --- Stepwise AI article toolkit ------------------------------------------- */
+.admin-ai-import__row { display: flex; flex-wrap: wrap; gap: .6rem; align-items: stretch; }
+.admin-ai-import__row .form-control { flex: 1 1 320px; min-width: 0; }
+.admin-ai-hint { font-size: .82rem; color: var(--admin-muted); margin-bottom: 0; }
+.admin-ai-badge {
+  display: inline-flex; align-items: center; margin-top: .7rem; padding: .3rem .7rem;
+  font-size: .82rem; font-weight: 600; border-radius: 999px;
+  color: var(--tone-primary-fg); background: var(--tone-primary-bg); border: 1px solid var(--tone-primary-bd);
+}
+.admin-ai-actions {
+  display: flex; flex-wrap: wrap; align-items: center; gap: .6rem;
+  padding-top: 1rem; border-top: 1px dashed var(--admin-border);
+}
+.admin-ai-actions .admin-ai-hint { flex: 1 1 240px; }
+
+/* AI buttons: keep width stable + show an in-button spinner while loading */
+.admin-ai-btn { position: relative; }
+.admin-ai-btn.is-loading { pointer-events: none; opacity: .92; }
+.admin-ai-btn.is-loading > i { visibility: hidden; }
+.admin-ai-btn.is-loading::before {
+  content: ""; position: absolute; left: .85rem; top: 50%; width: 15px; height: 15px;
+  margin-top: -7.5px; border: 2px solid currentColor; border-right-color: transparent;
+  border-radius: 50%; animation: admin-spin .6s linear infinite;
+}
+
+/* Collapsible SEO block inside each language tab */
+.admin-seo-details {
+  border: 1px solid var(--admin-border); border-radius: var(--admin-radius-sm, 12px);
+  background: var(--admin-surface-2, rgba(0,0,0,.015)); padding: .5rem .85rem;
+}
+.admin-seo-details > summary {
+  cursor: pointer; font-weight: 600; color: var(--admin-heading);
+  list-style: none; padding: .25rem 0;
+}
+.admin-seo-details > summary::-webkit-details-marker { display: none; }
+.admin-seo-details > summary::after { content: "\F282"; font-family: "bootstrap-icons"; float: right; opacity: .6; }
+.admin-seo-details[open] > summary::after { content: "\F286"; }
+
+/* Image step */
+.admin-ai-media { display: grid; gap: 1rem; align-items: start; }
+@media (min-width: 768px) {
+  .admin-ai-media { grid-template-columns: auto 1fr; }
+  .admin-ai-media__upload { grid-column: 1 / -1; }
+}
+.admin-ai-media__preview {
+  display: flex; flex-direction: column; gap: .4rem; width: max-content; max-width: 100%;
+}
+.admin-ai-media__preview img {
+  width: 260px; max-width: 100%; aspect-ratio: 16 / 10; object-fit: cover;
+  border-radius: 14px; border: 1px solid var(--admin-border); background: var(--tone-primary-bg);
+}
+.admin-ai-media__tag { font-size: .8rem; font-weight: 600; color: var(--tone-success-fg); }
+.admin-ai-media__controls { display: flex; flex-wrap: wrap; gap: .5rem; align-content: start; }
+
+/* Toasts */
+.admin-toast-stack {
+  position: fixed; right: 1rem; bottom: 1rem; z-index: 2100;
+  display: flex; flex-direction: column; gap: .6rem; width: min(92vw, 400px);
+}
+.admin-toast {
+  display: flex; align-items: flex-start; gap: .6rem; padding: .8rem .9rem;
+  border-radius: 12px; border: 1px solid var(--admin-border); background: var(--admin-surface);
+  box-shadow: var(--admin-shadow); color: var(--admin-heading); font-size: .9rem; line-height: 1.4;
+  animation: admin-toast-in .25s ease;
+}
+.admin-toast.is-leaving { opacity: 0; transform: translateY(6px); transition: .25s ease; }
+.admin-toast > i { font-size: 1.1rem; margin-top: .05rem; }
+.admin-toast > span { flex: 1; }
+.admin-toast > button { border: 0; background: transparent; font-size: 1.25rem; line-height: 1; color: var(--admin-muted); cursor: pointer; padding: 0 .15rem; }
+.admin-toast--success { border-color: var(--tone-success-bd); background: var(--tone-success-bg); }
+.admin-toast--success > i { color: var(--tone-success-fg); }
+.admin-toast--error { border-color: var(--tone-danger-bd); background: var(--tone-danger-bg); }
+.admin-toast--error > i { color: var(--tone-danger-fg); }
+.admin-toast--info > i { color: var(--admin-primary-600); }
+@keyframes admin-toast-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }

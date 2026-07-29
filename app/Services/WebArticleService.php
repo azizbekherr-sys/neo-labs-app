@@ -57,20 +57,50 @@ class WebArticleService
         return null;
     }
 
+    /**
+     * Pick a fresh topic image for a query. `variant` advances through the
+     * Pexels results so each "Boshqa rasm" click returns a different photo.
+     *
+     * @return array{path:string,url:string}|null
+     */
+    public function imageForQuery(string $query, int $variant = 0): ?array
+    {
+        $key = (string) config('services.pexels.key');
+        $query = trim($query);
+        if ($key === '' || $query === '') {
+            return null;
+        }
+        $src = $this->pexelsSearch($key, $query, max(0, $variant));
+        if ($src && ($path = $this->download($src))) {
+            return ['path' => $path, 'url' => media_url($path)];
+        }
+        return null;
+    }
+
     // ------------------------------------------------------------- internals
 
-    private function pexelsSearch(string $key, string $query): ?string
+    private function pexelsSearch(string $key, string $query, int $variant = 0): ?string
     {
+        $perPage = 15;
+        $page = intdiv($variant, $perPage) + 1;
+        $index = $variant % $perPage;
         try {
             $resp = Http::withHeaders(['Authorization' => $key])
                 ->timeout(25)
                 ->get('https://api.pexels.com/v1/search', [
                     'query' => $query,
-                    'per_page' => 1,
+                    'per_page' => $perPage,
+                    'page' => $page,
                     'orientation' => 'landscape',
                 ]);
             if ($resp->successful()) {
-                return $resp->json('photos.0.src.large') ?? $resp->json('photos.0.src.original');
+                $photos = $resp->json('photos', []);
+                if (!$photos) {
+                    return null;
+                }
+                // Wrap around if the requested variant is past the last result.
+                $photo = $photos[$index] ?? $photos[$variant % count($photos)] ?? $photos[0];
+                return ($photo['src']['large'] ?? null) ?: ($photo['src']['original'] ?? null);
             }
         } catch (\Throwable $e) {
             // fall through to og:image

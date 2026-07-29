@@ -11,6 +11,11 @@
   $authorRole = \App\Support\Content::localized($article, 'author_role', $locale);
   $reviewerRole = \App\Support\Content::localized($article, 'reviewer_role', $locale);
   $references = $article->{'references_' . $locale} ?: [];
+  $keywordList = $article->{'keywords_' . $locale} ?: [];
+  $metaKeywords = $keywordList ? implode(', ', $keywordList) : null;
+  $ogTitle = \App\Support\Content::localized($article, 'og_title', $locale);
+  $ogDescription = \App\Support\Content::localized($article, 'og_description', $locale);
+  $imageAlt = trim((string) \App\Support\Content::localized($article, 'image_alt', $locale)) ?: $title;
   $publishedYear = optional($article->created_at)->year;
   $isArchive = $publishedYear && $publishedYear < now()->year;
   $authorUrl = $article->author_slug ? route('authors.show', ['slug' => $article->author_slug]) : null;
@@ -44,6 +49,10 @@
   :robots="$article->robots"
   :schema="$schema"
   :breadcrumbs="$breadcrumbs"
+  :keywords="$metaKeywords"
+  :og-title="$ogTitle"
+  :og-description="$ogDescription"
+  :image-alt="$imageAlt"
   og-type="article"
   :preload-image="$media['src']"
 >
@@ -71,7 +80,7 @@
             @endif
           </dl>
           @if($article->photo)
-            <div class="article-cover"><img src="{{ $media['src'] }}" @if($media['srcset']) srcset="{{ $media['srcset'] }}" sizes="(min-width:880px) 840px, 100vw" @endif width="{{ $media['width'] }}" height="{{ $media['height'] }}" alt="{{ $title }}" loading="eager" fetchpriority="high" decoding="async"></div>
+            <div class="article-cover"><img src="{{ $media['src'] }}" @if($media['srcset']) srcset="{{ $media['srcset'] }}" sizes="(min-width:880px) 840px, 100vw" @endif width="{{ $media['width'] }}" height="{{ $media['height'] }}" alt="{{ $imageAlt }}" loading="eager" fetchpriority="high" decoding="async"></div>
           @endif
         </header>
 

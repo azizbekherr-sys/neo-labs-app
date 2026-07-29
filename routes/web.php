@@ -146,6 +146,11 @@ Route::middleware(['auth', \App\Http\Middleware\AdminLocale::class])->group(func
     // Articles management
     Route::get('/dashboard/articles/create', [\App\Http\Controllers\ArticleController::class, 'create'])->name('dashboard.articles.create');
     Route::post('/dashboard/articles/ai-fill', [\App\Http\Controllers\AiContentController::class, 'fillArticle'])->middleware('throttle:20,1')->name('dashboard.articles.ai-fill');
+    // Stepwise AI toolkit — each step is an independent request
+    Route::post('/dashboard/articles/ai/import', [\App\Http\Controllers\AiContentController::class, 'importArticle'])->middleware('throttle:20,1')->name('dashboard.articles.ai.import');
+    Route::post('/dashboard/articles/ai/translate', [\App\Http\Controllers\AiContentController::class, 'translateArticle'])->middleware('throttle:20,1')->name('dashboard.articles.ai.translate');
+    Route::post('/dashboard/articles/ai/seo', [\App\Http\Controllers\AiContentController::class, 'generateSeo'])->middleware('throttle:30,1')->name('dashboard.articles.ai.seo');
+    Route::post('/dashboard/articles/ai/image', [\App\Http\Controllers\AiContentController::class, 'articleImage'])->middleware('throttle:40,1')->name('dashboard.articles.ai.image');
     Route::post('/dashboard/articles', [\App\Http\Controllers\ArticleController::class, 'store'])->name('dashboard.articles.store');
     Route::get('/dashboard/articles/{article}/edit', [\App\Http\Controllers\ArticleController::class, 'edit'])->name('dashboard.articles.edit');
     Route::put('/dashboard/articles/{article}', [\App\Http\Controllers\ArticleController::class, 'update'])->name('dashboard.articles.update');

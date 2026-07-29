@@ -41,7 +41,7 @@ class ArticleController extends Controller
             'faq_questions_uz' => ['nullable', 'array'], 'faq_answers_uz' => ['nullable', 'array'],
             'faq_questions_ru' => ['nullable', 'array'], 'faq_answers_ru' => ['nullable', 'array'],
             'faq_questions_en' => ['nullable', 'array'], 'faq_answers_en' => ['nullable', 'array'],
-        ]);
+        ] + $this->seoValidationRules());
 
         // Upload photo (Supabase Storage or local, per MEDIA_DISK)
         if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
@@ -68,6 +68,7 @@ class ArticleController extends Controller
         $validated['faqs_en'] = $this->buildFaqs($request->input('faq_questions_en', []), $request->input('faq_answers_en', []));
         $validated['robots'] = $validated['robots'] ?? 'index,follow';
         $validated['schema_type'] = $validated['schema_type'] ?? 'BlogPosting';
+        $this->applySeoFields($validated, $request);
 
         Article::create($validated);
 
@@ -85,6 +86,7 @@ class ArticleController extends Controller
             'title_uz' => ['required', 'string', 'max:255'], 'title_ru' => ['required', 'string', 'max:255'], 'title_en' => ['required', 'string', 'max:255'],
             'description_uz' => ['nullable', 'string'], 'description_ru' => ['nullable', 'string'], 'description_en' => ['nullable', 'string'],
             'photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:6144'],
+            'photo_path' => ['nullable', 'string', 'max:255'],
             'seo_title_uz' => ['nullable', 'string', 'max:255'], 'seo_title_ru' => ['nullable', 'string', 'max:255'], 'seo_title_en' => ['nullable', 'string', 'max:255'],
             'meta_description_uz' => ['nullable', 'string', 'max:500'], 'meta_description_ru' => ['nullable', 'string', 'max:500'], 'meta_description_en' => ['nullable', 'string', 'max:500'],
             'canonical_url' => ['nullable', 'url', 'max:2048'], 'robots' => ['nullable', Rule::in(['index,follow', 'noindex,follow'])],
@@ -97,11 +99,21 @@ class ArticleController extends Controller
             'faq_questions_uz' => ['nullable', 'array'], 'faq_answers_uz' => ['nullable', 'array'],
             'faq_questions_ru' => ['nullable', 'array'], 'faq_answers_ru' => ['nullable', 'array'],
             'faq_questions_en' => ['nullable', 'array'], 'faq_answers_en' => ['nullable', 'array'],
-        ]);
+        ] + $this->seoValidationRules());
         $oldPhoto = $article->photo;
         if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
             $validated['photo'] = media_store($request->file('photo'), 'articles');
         }
+        // AI-selected image reference (full URL, or a local articles/ path).
+        if (empty($validated['photo']) && !empty($validated['photo_path'])) {
+            $candidate = (string) $validated['photo_path'];
+            if (Str::startsWith($candidate, ['http://', 'https://'])) {
+                $validated['photo'] = $candidate;
+            } elseif (str_starts_with(ltrim($candidate, '/'), 'articles/') && is_file(public_path(ltrim($candidate, '/')))) {
+                $validated['photo'] = ltrim($candidate, '/');
+            }
+        }
+        unset($validated['photo_path']);
         $validated['author_slug'] = !empty($validated['author_name']) ? Str::slug($validated['author_name']) : null;
         $validated['references_uz'] = $this->lines($request->input('references_uz_text'));
         $validated['references_ru'] = $this->lines($request->input('references_ru_text'));
@@ -111,6 +123,7 @@ class ArticleController extends Controller
         $validated['faqs_en'] = $this->buildFaqs($request->input('faq_questions_en', []), $request->input('faq_answers_en', []));
         $validated['robots'] = $validated['robots'] ?? 'index,follow';
         $validated['schema_type'] = $validated['schema_type'] ?? 'BlogPosting';
+        $this->applySeoFields($validated, $request);
         $article->update($validated);
         if (isset($validated['photo']) && $oldPhoto !== $validated['photo']) {
             $this->deletePhoto($oldPhoto);
@@ -128,6 +141,37 @@ class ArticleController extends Controller
     private function lines(?string $value): array
     {
         return array_values(array_filter(array_map('trim', preg_split('/\R/u', (string) $value) ?: [])));
+    }
+
+    /** Validation rules for the AI-generated SEO fields (per locale). */
+    private function seoValidationRules(): array
+    {
+        $rules = [];
+        foreach (['uz', 'ru', 'en'] as $loc) {
+            $rules["slug_{$loc}"] = ['nullable', 'string', 'max:255'];
+            $rules["focus_keyword_{$loc}"] = ['nullable', 'string', 'max:255'];
+            $rules["keywords_{$loc}_text"] = ['nullable', 'string', 'max:1000'];
+            $rules["og_title_{$loc}"] = ['nullable', 'string', 'max:255'];
+            $rules["og_description_{$loc}"] = ['nullable', 'string', 'max:500'];
+            $rules["image_alt_{$loc}"] = ['nullable', 'string', 'max:255'];
+        }
+        return $rules;
+    }
+
+    /** Normalise slug + keyword-list SEO fields into their column shapes. */
+    private function applySeoFields(array &$validated, Request $request): void
+    {
+        foreach (['uz', 'ru', 'en'] as $loc) {
+            $validated["slug_{$loc}"] = Str::slug((string) $request->input("slug_{$loc}")) ?: null;
+            $validated["keywords_{$loc}"] = $this->csv($request->input("keywords_{$loc}_text"));
+            unset($validated["keywords_{$loc}_text"]);
+        }
+    }
+
+    /** Split a comma/newline separated string into a clean list. */
+    private function csv(?string $value): array
+    {
+        return array_values(array_filter(array_map('trim', preg_split('/[,\n]+/u', (string) $value) ?: [])));
     }
 
     private function buildFaqs(array $questions, array $answers): array

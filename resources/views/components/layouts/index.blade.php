@@ -8,6 +8,9 @@
   'schema' => null,
   'breadcrumbs' => [],
   'ogType' => 'website',
+  'ogTitle' => null,
+  'ogDescription' => null,
+  'imageAlt' => null,
   'prev' => null,
   'next' => null,
   'preloadImage' => null,
@@ -85,11 +88,11 @@
     <!-- Open Graph -->
     <meta property="og:type" content="{{ $ogType }}" />
     <meta property="og:site_name" content="{{ $appName }}" />
-    <meta property="og:title" content="{{ $pageTitle }}" />
-    <meta property="og:description" content="{{ $metaDesc }}" />
+    <meta property="og:title" content="{{ trim((string) $ogTitle) ?: $pageTitle }}" />
+    <meta property="og:description" content="{{ trim((string) $ogDescription) ?: $metaDesc }}" />
     <meta property="og:url" content="{{ $canonicalUrl }}" />
     <meta property="og:image" content="{{ $ogImage }}" />
-    <meta property="og:image:alt" content="{{ $pageTitle }}" />
+    <meta property="og:image:alt" content="{{ trim((string) $imageAlt) ?: $pageTitle }}" />
     @php $ogLocaleMap = ['uz' => 'uz_UZ', 'ru' => 'ru_RU', 'en' => 'en_US']; @endphp
     <meta property="og:locale" content="{{ $ogLocaleMap[$locale] ?? 'ru_RU' }}" />
     @foreach($ogLocaleMap as $ogLocKey => $ogLocVal)
