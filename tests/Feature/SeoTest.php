@@ -394,6 +394,30 @@ class SeoTest extends TestCase
         $this->assertStringContainsString('min-height: 44px', $css);
     }
 
+    public function test_contact_page_defers_third_party_widgets_and_keeps_product_context(): void
+    {
+        $response = $this->get('/uz/contacts?product=PIKAMIN');
+
+        $response->assertOk()
+            ->assertSee('name="product_type" value="PIKAMIN"', false)
+            ->assertSee('data-lazy-map', false)
+            ->assertSee('data-src="https://www.google.com/maps/embed?', false)
+            ->assertSee('requestIdleCallback', false)
+            ->assertSee('}, 6000);', false)
+            ->assertSee('hreflang="uz-UZ" href="https://neo-labs.uz/uz/contacts"', false)
+            ->assertDontSee('/uz/contacts?view=', false);
+
+        $html = $response->getContent();
+        $this->assertMatchesRegularExpression('/<iframe[^>]+data-lazy-map[^>]+data-src="[^"]+"(?![^>]+src=)[^>]*>/', $html);
+
+        $nginx = file_get_contents(base_path('docker/nginx.conf'));
+        $this->assertStringContainsString('gzip on;', $nginx);
+        $this->assertStringContainsString('max-age=31536000, immutable', $nginx);
+
+        $php = file_get_contents(base_path('docker/php.ini'));
+        $this->assertStringContainsString('opcache.enable = 1', $php);
+    }
+
     /** @return array<string,mixed> */
     private function firstJsonLd(string $html): array
     {

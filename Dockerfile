@@ -5,7 +5,7 @@ FROM php:8.2-fpm-alpine
 RUN apk add --no-cache \
         nginx git unzip \
         postgresql-dev oniguruma-dev libzip-dev libpng-dev \
-    && docker-php-ext-install pdo pdo_pgsql mbstring bcmath zip gd exif
+    && docker-php-ext-install pdo pdo_pgsql mbstring bcmath zip gd exif opcache
 
 # Composer (deps are installed at build time; vendor/ is not committed)
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
@@ -17,6 +17,7 @@ WORKDIR /var/www/html
 COPY . /var/www/html
 
 RUN composer install --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs \
+    && php artisan view:cache \
     && chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 

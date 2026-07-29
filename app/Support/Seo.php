@@ -60,7 +60,15 @@ class Seo
             return self::baseUrl() . '/' . $locale;
         }
 
+        // Route::view() stores internal defaults such as "view" and "status"
+        // alongside real URI parameters. Passing those back to route() turns
+        // them into query strings in hreflang URLs.
         $parameters = $route->parameters();
+        if (method_exists($route, 'parameterNames')) {
+            $parameters = array_intersect_key($parameters, array_flip($route->parameterNames()));
+        } else {
+            unset($parameters['view'], $parameters['data'], $parameters['status'], $parameters['headers']);
+        }
         $parameters['locale'] = $locale;
 
         if ($route->getName() === 'product.show' && isset($parameters['product'])) {
@@ -218,11 +226,14 @@ class Seo
 
     private static function certifications(string $locale): array
     {
-        if (!Schema::hasTable('certificates')) {
-            return [];
-        }
-
         return Cache::remember('seo.certifications.' . $locale, 3600, function () use ($locale) {
+            // Schema::hasTable() performs a database round-trip. Keep it inside
+            // the cache callback so ordinary public page renders do not query
+            // the database just to build the shared Organization schema.
+            if (!Schema::hasTable('certificates')) {
+                return [];
+            }
+
             return Certificate::query()->where('is_published', true)->orderBy('id')->get()->map(function (Certificate $certificate) use ($locale) {
                 $name = $certificate->{'name_' . $locale} ?: $certificate->name_ru;
                 return self::clean([

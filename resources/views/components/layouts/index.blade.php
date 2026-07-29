@@ -271,8 +271,9 @@
           setTimeout(function(){ toast.classList.add('show'); }, 120);
           setTimeout(function(){ toast.classList.remove('show'); }, 3800);
         }
-        // Load chat after the primary page content is interactive; no global widget CSS overrides.
-        setTimeout(function () {
+        // Jivo adds several third-party JS/CSS/audio requests. Start it only
+        // after the page has settled so it cannot compete with critical assets.
+        var loadJivo = function () {
           if (document.querySelector('script[data-jivo-widget]')) return;
           var jivo = document.createElement('script');
           jivo.src = 'https://code.jivosite.com/widget/2KdGV1dr1B';
@@ -291,7 +292,14 @@
             });
             footerChatObserver.observe(document.body, {childList: true, subtree: true});
           }
-        }, 1500);
+        };
+        setTimeout(function () {
+          if ('requestIdleCallback' in window) {
+            window.requestIdleCallback(loadJivo, {timeout: 2500});
+          } else {
+            loadJivo();
+          }
+        }, 6000);
       });
       // Mobile menu toggle
       (function () {

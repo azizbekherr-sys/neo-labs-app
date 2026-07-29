@@ -7,10 +7,9 @@ sed -i "s/__PORT__/${PORT}/g" /etc/nginx/http.d/default.conf
 
 cd /var/www/html
 
-# Env vars come from Render at runtime — (re)build the discover manifest + caches.
-php artisan package:discover --ansi || true
+# Env vars come from Render at runtime, so config cache is built at startup.
+# Package discovery and compiled views are already prepared in the image.
 php artisan config:cache || true
-php artisan view:cache || true
 chmod -R 775 storage bootstrap/cache 2>/dev/null || true
 
 # php-fpm in background, nginx in foreground

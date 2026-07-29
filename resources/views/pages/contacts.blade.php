@@ -35,6 +35,9 @@
           <form class="accessible-form" action="{{ route('contact.send') }}" method="post" aria-describedby="required-hint" novalidate data-submit-form>
             @csrf
             <input type="hidden" name="form_context" value="general">
+            @if(request()->filled('product'))
+              <input type="hidden" name="product_type" value="{{ \Illuminate\Support\Str::limit(trim((string) request('product')), 255, '') }}">
+            @endif
             <div class="honeypot" aria-hidden="true"><label for="contact-website">Website</label><input id="contact-website" type="text" name="website" tabindex="-1" autocomplete="off"></div>
             <div class="field-group">
               <label for="contact-name">{{ __('content.contact.name') }} <span aria-hidden="true">*</span></label>
@@ -61,13 +64,34 @@
     <section id="contacts-map" class="map-section" aria-labelledby="map-title">
       <div class="container">
         <h2 id="map-title">{{ __('content.contact.map_title') }}</h2>
-        <iframe title="{{ __('content.contact.map_title') }}" src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3000.2875468140473!2d69.21593707593007!3d41.237293971319204!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zNDHCsDE0JzE0LjMiTiA2OcKwMTMnMDYuNiJF!5e0!3m2!1sru!2s!4v1763994169490!5m2!1sru!2s" width="100%" height="380" style="border:0" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        @php
+          $mapUrl = 'https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3000.2875468140473!2d69.21593707593007!3d41.237293971319204!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zNDHCsDE0JzE0LjMiTiA2OcKwMTMnMDYuNiJF!5e0!3m2!1sru!2s!4v1763994169490!5m2!1sru!2s';
+        @endphp
+        <iframe title="{{ __('content.contact.map_title') }}" data-lazy-map data-src="{{ $mapUrl }}" width="100%" height="380" style="border:0" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <noscript><iframe title="{{ __('content.contact.map_title') }}" src="{{ $mapUrl }}" width="100%" height="380" style="border:0" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></noscript>
       </div>
     </section>
   </main>
   @push('scripts')
     <script>
       document.querySelectorAll('[data-submit-form]').forEach(function(form){form.addEventListener('submit',function(event){if(!form.checkValidity()){event.preventDefault();form.reportValidity();return}var button=form.querySelector('button[type="submit"]');if(button){button.disabled=true;button.setAttribute('aria-disabled','true');button.textContent=button.getAttribute('data-label-loading')}})});
+      (function(){
+        var map = document.querySelector('[data-lazy-map]');
+        if (!map) return;
+        var loadMap = function(){
+          if (!map.getAttribute('src')) map.setAttribute('src', map.getAttribute('data-src'));
+        };
+        if (window.location.hash === '#contacts-map' || !('IntersectionObserver' in window)) {
+          loadMap();
+          return;
+        }
+        var observer = new IntersectionObserver(function(entries){
+          if (!entries[0].isIntersecting) return;
+          loadMap();
+          observer.disconnect();
+        }, {rootMargin: '200px 0px'});
+        observer.observe(map);
+      })();
     </script>
   @endpush
 </x-layouts.index>
