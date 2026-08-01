@@ -165,7 +165,7 @@ class SeoTest extends TestCase
 
     public function test_product_cards_are_reusable_equal_height_responsive_and_accessible(): void
     {
-        foreach (range(1, 4) as $index) {
+        foreach (range(1, 6) as $index) {
             Product::create([
                 'name' => 'Product '.$index,
                 'name_ru' => $index === 2 ? 'Очень длинное название продукта для проверки переноса строк' : 'Продукт '.$index,
@@ -199,10 +199,10 @@ class SeoTest extends TestCase
 
         $html = $response->getContent();
         $this->assertMatchesRegularExpression('/class="nl-product-card__image"[\s\S]+?width="\d+"[\s\S]+?height="\d+"/', $html);
-        $this->assertSame(4, substr_count($html, 'class="nl-product-card"'));
-        $this->assertSame(4, substr_count($html, 'class="nl-product-card__title"'));
-        $this->assertSame(4, substr_count($html, 'class="nl-product-card__button"'));
-        $this->assertSame(4, substr_count($html, 'class="nl-product-card__link"'));
+        $this->assertSame(6, substr_count($html, 'class="nl-product-card"'));
+        $this->assertSame(6, substr_count($html, 'class="nl-product-card__title"'));
+        $this->assertSame(6, substr_count($html, 'class="nl-product-card__button"'));
+        $this->assertSame(6, substr_count($html, 'class="nl-product-card__link"'));
 
         $home = $this->get('/ru');
         $home->assertOk();

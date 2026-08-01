@@ -208,7 +208,7 @@ Route::prefix('{locale}')
                 ->where('status', 'active')
                 ->where('is_featured', true)
                 ->latest('id')
-                ->take(6)
+                ->take(4)
                 ->get());
 
             $partners = Cache::remember('public.home.partners', PublicContentCache::TTL, fn () => Partner::query()->orderBy('id')->get());

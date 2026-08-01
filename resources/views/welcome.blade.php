@@ -274,50 +274,22 @@
         </div>
       </section>
 
-      <section id="products" class="products products-recommended" style="background:#ffffff;">
-        <div class="container">
+      <section id="products" class="products products-recommended" aria-labelledby="recommended-products-title">
+        <div class="container products-container">
           <div class="products-panel">
             <div class="section-head products-head">
               <span class="products-caption">{{ __('Рекомендуемые товары') }}</span>
-              <h2 class="products-title">{{ __('Наши продукты') }}</h2>
+              <h2 id="recommended-products-title" class="products-title">{{ __('Наши продукты') }}</h2>
             </div>
-            <style>
-              /* Panel background and heading styles */
-              #products .products-panel{
-                background: linear-gradient(135deg,#F1FFE9 0%, #E9FBE7 100%);
-                border:1px solid #E3F4E5;
-                border-radius: 28px;
-                padding: 26px 24px 30px;
-              }
-              #products .products-head{
-                text-align:center;
-                margin-bottom: 18px;
-              }
-              #products .products-caption{
-                display:inline-block;
-                color:#64B95C;
-                font-weight:600;
-                font-size:.9rem;
-                margin-bottom: 6px;
-              }
-              #products .products-title{
-                margin:0;
-                font-weight:900;
-                color:#5FBB46;
-                letter-spacing:.01em;
-                font-size: clamp(1.8rem, 3vw, 2.2rem);
-              }
-            </style>
             <div class="nl-products-grid">
             @if(isset($products) && $products->count())
               @foreach($products as $product)
                 <x-product-card :product="$product" />
               @endforeach
             @else
-              <div style="grid-column:1/-1;color:#6B7280;">{{ __('Пока нет товаров.') }}</div>
+              <p class="products-empty">{{ __('Пока нет товаров.') }}</p>
             @endif
             </div>
-            <div style="display:flex;justify-content:center;margin-top:22px;"><a class="btn" href="{{ route('catalog') }}" style="background:#347d3d;color:#fff;border-radius:14px;padding:13px 20px;text-decoration:none;">{{ __('Вся продукция') }}</a></div>
           </div>
         </div>
       </section>

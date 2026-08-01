@@ -688,6 +688,212 @@ nav a:focus-visible{ outline:3px solid #f3a712; outline-offset:2px; }
   font-size: 1.05rem;
 }
 
+/* Home: recommended products showcase */
+.products-recommended {
+  padding: 14px 0 70px;
+  background: #ffffff;
+}
+
+.products-recommended .products-container {
+  width: min(1480px, calc(100% - 28px));
+}
+
+.products-recommended .products-panel {
+  padding: 30px clamp(28px, 3.4vw, 52px) 34px;
+  overflow: hidden;
+  background: linear-gradient(115deg, #f0ffdc 0%, #edffe3 48%, #efffd2 100%);
+  border: 1px solid #e4f5cf;
+  border-radius: 24px;
+}
+
+.products-recommended .products-head {
+  margin-bottom: 38px;
+  text-align: center;
+}
+
+.products-recommended .products-caption {
+  display: inline-block;
+  margin-bottom: 5px;
+  color: #71c727;
+  font-size: .875rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.products-recommended .products-title {
+  margin: 0;
+  color: #58b941;
+  font-size: clamp(2.25rem, 3.2vw, 3rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -.025em;
+}
+
+.products-recommended .nl-products-grid {
+  gap: 16px;
+}
+
+.products-recommended .nl-product-card {
+  min-height: 460px;
+  padding: 24px;
+  border: 0;
+  border-radius: 16px;
+  box-shadow: none;
+}
+
+.products-recommended .nl-product-card:hover {
+  border-color: transparent;
+  box-shadow: 0 16px 34px rgba(54, 112, 43, .11);
+  transform: translateY(-5px);
+}
+
+.products-recommended .nl-product-card .nl-product-card__media {
+  height: 220px;
+  flex-basis: 220px;
+  border: 0;
+  border-radius: 0;
+  background: #ffffff;
+}
+
+.products-recommended .nl-product-card .nl-product-card__media::after {
+  display: none;
+}
+
+.products-recommended .nl-product-card .nl-product-card__image {
+  width: 86%;
+  height: 86%;
+}
+
+.products-recommended .nl-product-card .nl-product-card__content {
+  padding: 14px 0 0;
+}
+
+.products-recommended .nl-product-card .nl-product-card__benefit {
+  min-height: 1.4em;
+  margin-bottom: 8px;
+  color: #68716b;
+  font-size: .875rem;
+  font-weight: 400;
+  line-height: 1.4;
+  -webkit-line-clamp: 1;
+}
+
+.products-recommended .nl-product-card .nl-product-card__title {
+  min-height: 2.4em;
+  margin-bottom: 8px;
+  color: #1f2236;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -.015em;
+}
+
+.products-recommended .nl-product-card .nl-product-card__description {
+  min-height: 3em;
+  margin-bottom: 16px;
+  color: #777e79;
+  font-size: .8125rem;
+  line-height: 1.45;
+  -webkit-line-clamp: 2;
+}
+
+.products-recommended .nl-product-card .nl-product-card__disclaimer {
+  display: none;
+}
+
+.products-recommended .nl-product-card .nl-product-card__button {
+  width: max-content;
+  min-height: 42px;
+  padding: 0 16px;
+  background: #79d125;
+  border-radius: 13px;
+  box-shadow: none;
+  font-size: .8125rem;
+  font-weight: 600;
+}
+
+.products-recommended .nl-product-card:hover .nl-product-card__button {
+  background: #65bd1d;
+  box-shadow: none;
+}
+
+.products-recommended .nl-product-card .nl-product-card__arrow {
+  margin-left: 12px;
+}
+
+.products-recommended .products-empty {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 30px;
+  color: #667085;
+  text-align: center;
+  background: #ffffff;
+  border-radius: 16px;
+}
+
+@media (min-width: 768px) and (max-width: 1279px) {
+  .products-recommended .products-panel {
+    padding: 30px 28px 32px;
+  }
+
+  .products-recommended .nl-product-card .nl-product-card__media {
+    height: 230px;
+    flex-basis: 230px;
+  }
+}
+
+@media (max-width: 767px) {
+  .products-recommended {
+    padding: 10px 0 48px;
+  }
+
+  .products-recommended .products-container {
+    width: min(100% - 20px, 540px);
+  }
+
+  .products-recommended .products-panel {
+    padding: 26px 16px 18px;
+    border-radius: 20px;
+  }
+
+  .products-recommended .products-head {
+    margin-bottom: 24px;
+  }
+
+  .products-recommended .products-caption {
+    font-size: .8125rem;
+  }
+
+  .products-recommended .products-title {
+    font-size: clamp(1.9rem, 10vw, 2.35rem);
+  }
+
+  .products-recommended .nl-product-card {
+    min-height: 0;
+    padding: 18px;
+    border-radius: 16px;
+  }
+
+  .products-recommended .nl-product-card .nl-product-card__media {
+    height: 220px;
+    flex-basis: 220px;
+  }
+
+  .products-recommended .nl-product-card .nl-product-card__content {
+    padding-top: 12px;
+  }
+
+  .products-recommended .nl-product-card .nl-product-card__benefit,
+  .products-recommended .nl-product-card .nl-product-card__title,
+  .products-recommended .nl-product-card .nl-product-card__description {
+    min-height: 0;
+  }
+
+  .products-recommended .nl-product-card .nl-product-card__button {
+    width: 100%;
+  }
+}
+
 /* Reusable premium product grid and card */
 .nl-products-grid {
   display: grid;
