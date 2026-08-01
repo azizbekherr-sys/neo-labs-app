@@ -9,17 +9,19 @@ use App\Models\ContactMessage;
 use App\Models\Partner;
 use App\Models\Product;
 use App\Models\ProductCategory;
+use App\Services\AnalyticsReport;
 use Illuminate\Http\Request;
 
 class AdminDashboardController extends Controller
 {
-    public function index()
+    public function index(AnalyticsReport $analytics)
     {
         return view('admin.overview', [
             'stats' => $this->stats(),
             'recentProducts' => Product::query()->latest()->take(5)->get(),
             'recentArticles' => Article::query()->latest()->take(5)->get(),
             'recentMessages' => ContactMessage::query()->latest()->take(5)->get(),
+            'analyticsSummary' => $analytics->summary(30),
         ]);
     }
 

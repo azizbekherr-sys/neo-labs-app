@@ -102,6 +102,8 @@ use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\CompanyFactController;
 use App\Http\Controllers\ContactMessageController;
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\AnalyticsController;
+use App\Http\Controllers\AdminAnalyticsController;
 
 // Auth routes
 Route::middleware('guest')->group(function () {
@@ -123,9 +125,15 @@ Route::post('/contact/send', [ContactController::class, 'send'])
     ->middleware('throttle:6,1')
     ->name('contact.send');
 
+Route::post('/analytics/collect', [AnalyticsController::class, 'collect'])
+    ->middleware('throttle:180,1')
+    ->name('analytics.collect');
+
 // Protected area
 Route::middleware(['auth', \App\Http\Middleware\AdminLocale::class])->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/analytics', [AdminAnalyticsController::class, 'index'])->name('dashboard.analytics');
+    Route::get('/dashboard/analytics/export', [AdminAnalyticsController::class, 'export'])->name('dashboard.analytics.export');
     Route::get('/dashboard/products', [AdminDashboardController::class, 'products'])->name('dashboard.products.index');
     Route::get('/dashboard/articles', [AdminDashboardController::class, 'articles'])->name('dashboard.articles.index');
     Route::get('/dashboard/partners', [AdminDashboardController::class, 'partners'])->name('dashboard.partners.index');

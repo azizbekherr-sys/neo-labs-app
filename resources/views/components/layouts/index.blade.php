@@ -20,6 +20,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <meta name="analytics-endpoint" content="{{ route('analytics.collect', [], false) }}" />
     @php
       $appName = config('seo.site_name', 'NEO-LABS');
       $appUrl = \App\Support\Seo::baseUrl();
@@ -268,9 +270,97 @@
       </div>
     </footer>
     <script>
+      (function () {
+        var endpointMeta = document.querySelector('meta[name="analytics-endpoint"]');
+        var csrfMeta = document.querySelector('meta[name="csrf-token"]');
+        var disabled = !endpointMeta || navigator.doNotTrack === '1' || window.doNotTrack === '1';
+
+        function makeId() {
+          if (window.crypto && typeof window.crypto.randomUUID === 'function') return window.crypto.randomUUID();
+          return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (character) {
+            var random = Math.random() * 16 | 0;
+            var value = character === 'x' ? random : (random & 0x3 | 0x8);
+            return value.toString(16);
+          });
+        }
+
+        function stored(storage, key) {
+          try {
+            var current = storage.getItem(key);
+            if (current) return current;
+            current = makeId();
+            storage.setItem(key, current);
+            return current;
+          } catch (error) {
+            return makeId();
+          }
+        }
+
+        var visitorId = stored(window.localStorage, 'nl_analytics_visitor');
+        var sessionId = stored(window.sessionStorage, 'nl_analytics_session');
+        var query = new URLSearchParams(window.location.search);
+        var clientTimezone = '';
+        try { clientTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (error) {}
+        var attribution = null;
+        try { attribution = JSON.parse(window.sessionStorage.getItem('nl_analytics_attribution') || 'null'); } catch (error) {}
+        if (!attribution) {
+          var initialReferrer = document.referrer || '';
+          try { if (initialReferrer && new URL(initialReferrer).host === window.location.host) initialReferrer = ''; } catch (error) {}
+          attribution = {
+            referrer: initialReferrer,
+            source: query.get('utm_source') || (query.get('gclid') ? 'google' : ''),
+            medium: query.get('utm_medium') || (query.get('gclid') ? 'cpc' : ''),
+            campaign: query.get('utm_campaign') || '',
+            landing_path: window.location.pathname
+          };
+          try { window.sessionStorage.setItem('nl_analytics_attribution', JSON.stringify(attribution)); } catch (error) {}
+        }
+
+        function send(eventType, details) {
+          if (disabled) return;
+          details = details || {};
+          var payload = {
+            event_id: makeId(),
+            visitor_id: visitorId,
+            session_id: sessionId,
+            event_type: eventType || 'page_view',
+            path: window.location.pathname,
+            title: document.title,
+            landing_path: attribution.landing_path || window.location.pathname,
+            referrer: attribution.referrer || '',
+            utm_source: attribution.source || '',
+            utm_medium: attribution.medium || '',
+            utm_campaign: attribution.campaign || '',
+            target_url: details.link_url || details.target_url || '',
+            screen_width: Math.min(65535, window.screen && window.screen.width || window.innerWidth || 0),
+            screen_height: Math.min(65535, window.screen && window.screen.height || window.innerHeight || 0),
+            client_language: navigator.language || '',
+            timezone: clientTimezone
+          };
+          window.fetch(endpointMeta.content, {
+            method: 'POST',
+            credentials: 'same-origin',
+            keepalive: true,
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'X-CSRF-TOKEN': csrfMeta ? csrfMeta.content : '',
+              'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify(payload)
+          }).catch(function () {});
+        }
+
+        window.NeoAnalytics = {trackEvent: send};
+        var recordPageView = function () { send('page_view'); };
+        if ('requestIdleCallback' in window) window.requestIdleCallback(recordPageView, {timeout: 1600});
+        else window.setTimeout(recordPageView, 900);
+      })();
+
       window.dataLayer = window.dataLayer || [];
       function trackSeoEvent(name, details) {
         window.dataLayer.push(Object.assign({event: name}, details || {}));
+        if (window.NeoAnalytics) window.NeoAnalytics.trackEvent(name, details || {});
       }
       document.addEventListener('click', function (event) {
         var link = event.target.closest('a[href]');
@@ -279,6 +369,9 @@
         var named = link.getAttribute('data-analytics');
         var eventName = named || (href.indexOf('tel:') === 0 ? 'phone_click' : (href.indexOf('mailto:') === 0 ? 'email_click' : null));
         if (!eventName && /telegram|t\.me|instagram|facebook|linkedin|youtube/i.test(href)) eventName = 'social_click';
+        if (!eventName && /^https?:\/\//i.test(href)) {
+          try { if (new URL(href, window.location.href).host !== window.location.host) eventName = 'outbound_click'; } catch (error) {}
+        }
         if (eventName) trackSeoEvent(eventName, {link_url: href, page_path: window.location.pathname});
       });
       document.addEventListener('submit', function (event) {

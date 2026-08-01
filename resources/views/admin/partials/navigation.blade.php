@@ -7,6 +7,7 @@
   $groups = [
     'Boshqaruv' => [
       ['route' => 'dashboard', 'pattern' => 'dashboard', 'icon' => 'grid-1x2', 'label' => 'Umumiy ko‘rinish'],
+      ['route' => 'dashboard.analytics', 'pattern' => 'dashboard.analytics*', 'icon' => 'bar-chart-line', 'label' => 'Sayt analitikasi'],
     ],
     'Kontent' => [
       ['route' => 'dashboard.products.index', 'pattern' => 'dashboard.products.*', 'icon' => 'box-seam', 'label' => 'Mahsulotlar'],

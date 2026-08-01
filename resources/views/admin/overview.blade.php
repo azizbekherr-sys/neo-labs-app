@@ -24,6 +24,8 @@
       <div class="col-6 col-lg-4 col-xl-3"><x-admin.stat-card :href="route('dashboard.certificates.index')" label="Sertifikatlar" :value="$stats['certificates']" icon="patch-check" /></div>
       <div class="col-6 col-lg-4 col-xl-3"><x-admin.stat-card :href="route('dashboard.company-facts.index')" label="Kompaniya faktlari" :value="$stats['company_facts']" icon="building-check" /></div>
       <div class="col-6 col-lg-4 col-xl-3"><x-admin.stat-card :href="route('dashboard.messages.index', ['status'=>'new'])" label="Yangi murojaatlar" :value="$stats['new_messages']" icon="chat-left-dots" :tone="$stats['new_messages'] > 0 ? 'warning' : 'success'" /></div>
+      <div class="col-6 col-lg-4 col-xl-3"><x-admin.stat-card :href="route('dashboard.analytics')" label="Ko‘rishlar (30 kun)" :value="$analyticsSummary['page_views']" icon="eye" tone="success" /></div>
+      <div class="col-6 col-lg-4 col-xl-3"><x-admin.stat-card :href="route('dashboard.analytics')" label="Tashrifchilar (30 kun)" :value="$analyticsSummary['visitors']" icon="person-lines-fill" /></div>
       <div class="col-6 col-lg-4 col-xl-3"><x-admin.stat-card :href="url('/uz')" label="Saytni ochish" value="↗" icon="globe" /></div>
     </div>
   </section>

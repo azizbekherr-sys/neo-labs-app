@@ -13,6 +13,7 @@ class AdminDashboardTest extends TestCase
 
     private array $adminPages = [
         '/dashboard',
+        '/dashboard/analytics',
         '/dashboard/products',
         '/dashboard/articles',
         '/dashboard/partners',
