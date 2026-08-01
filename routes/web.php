@@ -212,7 +212,7 @@ Route::prefix('{locale}')
                 ->get());
 
             $partners = Cache::remember('public.home.partners', PublicContentCache::TTL, fn () => Partner::query()->orderBy('id')->get());
-            $articles = Cache::remember('public.home.articles', PublicContentCache::TTL, fn () => Article::query()->latest('id')->take(3)->get());
+            $articles = Cache::remember('public.home.articles', PublicContentCache::TTL, fn () => Article::query()->latest('id')->take(4)->get());
 
             return view('welcome', compact('products', 'partners', 'articles'));
         })->name('home');

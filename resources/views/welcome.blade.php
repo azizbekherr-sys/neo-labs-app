@@ -294,155 +294,13 @@
         </div>
       </section>
 
-      <section id="articles" class="articles">
-        <div class="container">
+      <section id="articles" class="articles articles-home" aria-labelledby="home-articles-title">
+        <div class="container articles-container">
           <div class="articles-panel">
             <div class="section-head articles-head">
               <span class="articles-caption">{{ __('Полезные советы и новости') }}</span>
-              <h2 class="articles-title">{{ __('Новые публикации о медицине') }}<br>{{ __('и здоровье') }}</h2>
+              <h2 id="home-articles-title" class="articles-title">{{ __('Новые публикации о медицине') }}<br>{{ __('и здоровье') }}</h2>
             </div>
-            <style>
-              /* Panel and headings */
-              #articles .articles-panel{
-                background: linear-gradient(135deg,#F1FFE9 0%, #E9FBE7 100%);
-                border:1px solid #E3F4E5;
-                border-radius: 28px;
-                padding: 26px 24px 30px;
-              }
-              #articles .articles-head{ text-align:center; margin-bottom: 18px; }
-              #articles .articles-caption{
-                display:inline-block; color:#64B95C; font-weight:600; font-size:.9rem; margin-bottom:6px;
-              }
-              #articles .articles-title{
-                margin:0; font-weight:900; letter-spacing:.01em;
-                background: linear-gradient(120deg, #228C3F 0%, #89D033 100%);
-                -webkit-background-clip:text; background-clip:text; color:transparent;
-                text-shadow: 0 2px 8px rgba(0,0,0,.08);
-                font-size: clamp(1.8rem, 3vw, 2.4rem);
-              }
-              /* Grid with horizontal cards */
-              #articles .articles-grid{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; }
-              #articles .article-card{
-                display:grid; grid-template-columns: 240px 1fr; gap:20px; align-items:center;
-                background:#fff; border:1px solid #E6F4E8; border-radius:16px; padding:16px 18px;
-                box-shadow:0 12px 28px rgba(17,94,50,0.06);
-              }
-              #articles .article-card img{
-                width:100%; height:180px; object-fit:cover; border-radius:14px; grid-column:1; grid-row:1/4;
-              }
-              #articles .article-card h3{ margin:0 0 6px 0; font-size:1.1rem; }
-              #articles .article-card p{ margin:0 0 10px 0; color:#6B7280; }
-              #articles .article-card a{
-                color:#5FBB46; font-weight:600; text-decoration:none; display:inline-flex; align-items:center; gap:6px;
-              }
-              #articles .article-card a::after{ content:"→"; display:inline-block; }
-              /* Creative polish for cards */
-              #articles .article-card{
-                transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
-                position: relative;
-                overflow: hidden;
-              }
-              #articles .article-card::after{
-                content:""; position:absolute; inset:auto -20% 0 -20%; height:38%; border-radius:50%;
-                background: radial-gradient(80% 70% at 50% 100%, rgba(105,206,121,.08), transparent 70%);
-                pointer-events:none;
-              }
-              #articles .article-card:hover{
-                transform: translateY(-2px);
-                box-shadow: 0 16px 40px rgba(17,94,50,0.10);
-                border-color: #DBF3E2;
-              }
-              #articles .article-card img{
-                transition: transform .35s ease, filter .35s ease;
-                will-change: transform;
-              }
-              #articles .article-card:hover img{ transform: scale(1.06); }
-              /* Make the "Подробнее" look like a pill button */
-              #articles .article-card a{
-                background: linear-gradient(135deg,#89D033 0%, #5FBB46 100%);
-                color:#fff; padding:10px 14px; border-radius:999px;
-                box-shadow: 0 10px 24px rgba(34,197,94,0.18);
-                justify-self: start; /* prevent stretching in CSS Grid */
-                width: auto; white-space: nowrap; display: inline-flex;
-              }
-              #articles .article-card a::after{ content:""; }
-              #articles .article-card a span.icon{
-                display:inline-block; transform: translateX(0); transition: transform .2s ease;
-              }
-              #articles .article-card a:hover span.icon{ transform: translateX(2px); }
-              /* Article modal */
-              #articles .am-backdrop{
-                position: fixed; inset: 0; background: rgba(0,0,0,.4);
-                backdrop-filter: blur(4px);
-                display: none; align-items: center; justify-content: center;
-                z-index: 3000; padding: 20px;
-              }
-              #articles .am-backdrop.show{ display:flex; animation: amFade .18s ease-out; }
-              #articles .am-modal{
-                width: min(920px, 96vw); border-radius: 22px;
-                background: rgba(255,255,255,.96);
-                border: 1px solid #E3F4E5;
-                box-shadow: 0 30px 80px rgba(17,94,50,0.22), 0 8px 24px rgba(0,0,0,.06);
-                overflow: hidden;
-                transform: translateY(8px) scale(.98);
-                opacity: .98;
-                animation: amPop .22s ease-out forwards;
-                position: relative;
-              }
-              #articles .am-hero{
-                position: relative; height: clamp(200px, 36vw, 320px); overflow: hidden;
-                background: linear-gradient(135deg,#F1FFE9 0%, #E9FBE7 100%);
-              }
-              #articles .am-hero img{
-                width: 100%; height: 100%; object-fit: cover;
-                filter: saturate(1.06) contrast(1.03);
-                transform: scale(1.02);
-                animation: amHeroZoom 12s ease-in-out infinite alternate;
-              }
-              #articles .am-hero::after{
-                content:""; position:absolute; inset:0;
-                background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,.18) 100%);
-              }
-              #articles .am-body{
-                padding: 18px 20px 22px 20px;
-                max-height: min(52vh, 460px);
-                overflow: auto;
-              }
-              #articles .am-title{
-                margin: 0 0 10px 0; font-weight: 900; letter-spacing: .01em;
-                background: linear-gradient(120deg, #228C3F 0%, #89D033 100%);
-                -webkit-background-clip:text; background-clip:text; color:transparent;
-                text-shadow: 0 2px 8px rgba(0,0,0,.08);
-                font-size: clamp(1.4rem, 2.2vw, 1.8rem);
-              }
-              #articles .am-text{ margin: 0; color:#374151; line-height: 1.7; }
-              #articles .am-close{
-                position: absolute; right: 10px; top: 10px;
-                width: 36px; height: 36px; border-radius: 10px;
-                border: 1px solid rgba(0,0,0,.06); background:#fff; cursor:pointer;
-                box-shadow: 0 8px 16px rgba(0,0,0,.08);
-                display: inline-flex; align-items: center; justify-content: center;
-                font-size: 20px; color:#111827;
-              }
-              #articles .am-close:hover{ transform: scale(1.04); }
-              @keyframes amPop {
-                to { transform: translateY(0) scale(1); opacity: 1; }
-              }
-              @keyframes amFade {
-                from { opacity: 0; } to { opacity: 1; }
-              }
-              @keyframes amHeroZoom {
-                from { transform: scale(1.02); }
-                to { transform: scale(1.08); }
-              }
-              @media (max-width: 992px){
-                #articles .articles-grid{ grid-template-columns:1fr; }
-              }
-              @media (max-width: 640px){
-                #articles .article-card{ grid-template-columns:1fr; }
-                #articles .article-card img{ height:160px; grid-row:auto; }
-              }
-            </style>
             <div class="articles-grid">
               @php
                 $rawLocale = app()->getLocale();
@@ -458,31 +316,25 @@
               @forelse(($articles ?? collect()) as $article)
                 @php
                   $title = $pickA($article, 'title') ?? '';
-                  $text = \App\Support\Content::excerpt($pickA($article, 'description') ?? '', 160);
+                  $text = \App\Support\Content::excerpt($pickA($article, 'description') ?? '', 180);
+                  $text = $text !== '' ? $text : __('content.article.index_description');
                   $articleMedia = \App\Support\Media::responsive($article->photo, 'articles', [480, 960]);
-                  $views = (int) ($article->views ?? 0);
                   $articleSlug = \Illuminate\Support\Str::slug($title ?: ('news-' . $article->id));
                 @endphp
               <article class="article-card">
-                  <img src="{{ $articleMedia['src'] }}" @if($articleMedia['srcset']) srcset="{{ $articleMedia['srcset'] }}" sizes="(min-width:993px) 240px, 100vw" @endif width="{{ $articleMedia['width'] }}" height="{{ $articleMedia['height'] }}" alt="{{ $title }}" loading="lazy" decoding="async" />
+                <div class="article-card__media">
+                  <img src="{{ $articleMedia['src'] }}" @if($articleMedia['srcset']) srcset="{{ $articleMedia['srcset'] }}" sizes="(min-width:1280px) 230px, (min-width:768px) 210px, 100vw" @endif width="{{ $articleMedia['width'] }}" height="{{ $articleMedia['height'] }}" alt="{{ $title }}" loading="lazy" decoding="async" />
+                </div>
+                <div class="article-card__body">
                   <h3>{{ $title }}</h3>
                   <p>{{ $text }}</p>
-                  <div class="article-meta" style="display:flex;align-items:center;gap:10px;color:#6B7280;margin:6px 0 8px 0;">
-                    <span style="display:inline-flex;align-items:center;gap:6px;">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
-                        <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8z"/>
-                        <path d="M8 5.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5z" fill="#6B7280"/>
-                      </svg>
-                      <span>{{ number_format($views, 0, '.', ' ') }}</span>
-                    </span>
-                  </div>
-                  <a class="article-more" href="{{ route('articles.show', ['article' => $article, 'slug' => $articleSlug]) }}">{{ __('Читать далее') }} <span class="icon">→</span></a>
+                  <a class="article-more" href="{{ route('articles.show', ['article' => $article, 'slug' => $articleSlug]) }}" aria-label="{{ __('Читать далее') }}: {{ $title }}">{{ __('Читать далее') }} <span class="icon" aria-hidden="true">→</span></a>
+                </div>
               </article>
               @empty
-                <div class="text-secondary">{{ __('Пока нет статей') }}</div>
+                <p class="articles-empty">{{ __('Пока нет статей') }}</p>
               @endforelse
             </div>
-            <div style="display:flex;justify-content:center;margin-top:22px;"><a class="btn" href="{{ route('articles') }}" style="background:#347d3d;color:#fff;border-radius:14px;padding:13px 20px;text-decoration:none;">{{ __('content.article.back') }}</a></div>
           </div>
         </div>
       </section>
@@ -490,26 +342,28 @@
       <x-faq :items="__('site.home.faq')" />
 
       <section id="contacts" class="contacts">
-        <div class="container">
+        <div class="container home-contacts__container">
           <div class="contacts-panel">
             <div class="contacts-grid">
               <div class="contact-info">
                 <h2 class="contact-title">{{ __('Контакты') }}</h2>
                 <div class="contact-blocks">
-                  <div class="contact-block">
-                    <div class="contact-label">{{ __('Адрес') }}</div>
-                    <p class="contact-value">{{ __('Узбекистан, город Ташкент, Сергели район') }}</p>
-                  </div>
+                  <address class="contact-address">
+                    <div class="contact-block">
+                      <div class="contact-label">{{ __('Адрес') }}</div>
+                      <p class="contact-value">{{ __('Узбекистан, город Ташкент, Сергели район') }}</p>
+                    </div>
+                  </address>
                   <div class="contact-block">
                     <div class="contact-label">{{ __('Время работы') }}</div>
                     <p class="contact-value">{{ __('с 09:00 до 18:00, Пн-Сб') }}</p>
                   </div>
                   <div class="contact-row">
-                    <span class="ci">☎</span>
+                    <span class="ci" aria-hidden="true">☎</span>
                     <a href="tel:+998991018839" class="contact-link">+998 99 101 88 39</a>
                   </div>
                   <div class="contact-row">
-                    <span class="ci">✉</span>
+                    <span class="ci" aria-hidden="true">✉</span>
                     <a href="mailto:neo_labs2019@mail.ru" class="contact-link">neo_labs2019@mail.ru</a>
                   </div>
                   <div class="contact-cta">
@@ -520,65 +374,50 @@
               <div class="contact-form-card">
                 <h3 class="contact-form-title">{{ __('Напишите нам') }}</h3>
                 <p class="contact-form-desc">{{ __('Если у вас есть вопрос, предложение или хотите узнать больше — заполните форму') }}</p>
-                <a class="btn contact-submit" href="{{ route('contacts') }}#contact-form-title" style="background:#347d3d;color:#fff;text-decoration:none;">{{ __('content.product.contact_cta') }}</a>
+                <p class="form-hint" id="home-required-hint">{{ __('content.contact.required_hint') }}</p>
+
+                @if(session('contact_ok'))<div class="contact-alert ok" role="status">{{ session('contact_ok') }}</div>@endif
+                @if(session('contact_error'))<div class="contact-alert err" role="alert">{{ session('contact_error') }}</div>@endif
+                @if($errors->any())
+                  <div class="contact-alert err" role="alert"><ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>
+                @endif
+
+                <form class="contact-form" action="{{ route('contact.send') }}" method="post" aria-describedby="home-required-hint" novalidate data-home-contact-form>
+                  @csrf
+                  <input type="hidden" name="form_context" value="general">
+                  <div class="honeypot" aria-hidden="true">
+                    <label for="home-contact-website">Website</label>
+                    <input id="home-contact-website" type="text" name="website" tabindex="-1" autocomplete="off">
+                  </div>
+                  <div class="home-contact-field">
+                    <label for="home-contact-name">{{ __('content.contact.name') }} <span aria-hidden="true">*</span></label>
+                    <input id="home-contact-name" type="text" name="name" value="{{ old('name') }}" required maxlength="255" autocomplete="name" placeholder="{{ __('content.contact.name') }}" aria-invalid="{{ $errors->has('name') ? 'true' : 'false' }}" @if($errors->has('name')) aria-describedby="home-contact-name-error" @endif>
+                    @error('name')<span class="field-error" id="home-contact-name-error">{{ $message }}</span>@enderror
+                  </div>
+                  <div class="home-contact-field">
+                    <label for="home-contact-phone">{{ __('content.contact.phone') }} <span aria-hidden="true">*</span></label>
+                    <input id="home-contact-phone" type="tel" name="phone" value="{{ old('phone') }}" required maxlength="255" autocomplete="tel" inputmode="tel" placeholder="{{ __('content.contact.phone') }}" aria-invalid="{{ $errors->has('phone') ? 'true' : 'false' }}" @if($errors->has('phone')) aria-describedby="home-contact-phone-error" @endif>
+                    @error('phone')<span class="field-error" id="home-contact-phone-error">{{ $message }}</span>@enderror
+                  </div>
+                  <div class="home-contact-field">
+                    <label for="home-contact-message">{{ __('content.contact.message') }} <span aria-hidden="true">*</span></label>
+                    <textarea id="home-contact-message" name="message" required maxlength="2000" rows="5" placeholder="{{ __('content.contact.message') }}" aria-invalid="{{ $errors->has('message') ? 'true' : 'false' }}" @if($errors->has('message')) aria-describedby="home-contact-message-error" @endif>{{ old('message') }}</textarea>
+                    @error('message')<span class="field-error" id="home-contact-message-error">{{ $message }}</span>@enderror
+                  </div>
+                  <button class="btn contact-submit" type="submit" data-label-default="{{ __('content.contact.send') }}" data-label-loading="{{ __('content.contact.sending') }}">
+                    <span>{{ __('content.contact.send') }}</span>
+                    <span aria-hidden="true">↗</span>
+                  </button>
+                </form>
               </div>
             </div>
-            <style>
-              /* Panel */
-              #contacts .contacts-panel{
-                background: linear-gradient(135deg,#f1ffe9 0%, #e9fbe7 100%);
-                border-radius:28px; padding:32px;
-              }
-              /* Grid */
-              #contacts .contacts-grid{
-                display:grid; grid-template-columns:1.15fr 1fr; gap:32px; align-items:start;
-              }
-              /* Left side */
-              #contacts .contact-info{ padding:8px; color:#18361d; }
-              #contacts .contact-title{
-                margin:0 0 22px 0; font-weight:900; color:#5FBB46;
-                font-size: clamp(2.1rem, 2.6vw, 2.8rem);
-              }
-              #contacts .contact-blocks{ display:flex; flex-direction:column; gap:14px; }
-              #contacts .contact-label{
-                font-weight:700; font-size:1.05rem; color:#5FBB46;
-              }
-              #contacts .contact-value{ margin:.3rem 0 0 0; line-height:1.6; font-size:1.02rem; }
-              #contacts .contact-row{ display:flex; align-items:center; gap:10px; }
-              #contacts .ci{
-                width:34px; height:34px; border-radius:50%; background:#fff; border:1px solid #c6efcf;
-                display:inline-flex; align-items:center; justify-content:center; color:#5FBB46; font-weight:700;
-              }
-              #contacts .contact-link{ font-size:1.08rem; font-weight:700; color:#5FBB46; text-decoration:none; }
-              #contacts .contact-map{ background:#89D033; border-radius:999px; padding:12px 20px; display:inline-flex; align-items:center; gap:10px; }
-              /* Right side card */
-              #contacts .contact-form-card{
-                background:#ffffff; border-radius:24px; padding:24px; box-shadow:0 18px 40px rgba(34,197,94,0.16);
-              }
-              #contacts .contact-form-title{
-                margin:0 0 6px 0; font-weight:900; color:#5FBB46;
-                font-size: clamp(1.8rem, 2.2vw, 2.4rem);
-              }
-              #contacts .contact-form-desc{ margin:0 0 16px 0; color:#6b7280; }
-              #contacts .contact-form{ display:grid; gap:12px; }
-              #contacts .contact-form input,
-              #contacts .contact-form textarea{
-                height:48px; border-radius:12px; border:1px solid #d7f0dc; background:#f6fff9; padding:12px 14px; font:inherit;
-              }
-              #contacts .contact-form textarea{ min-height:140px; height:auto; resize:vertical; }
-              #contacts .contact-submit{ height:46px; border-radius:999px; background:#89D033; color:#fff; font-weight:700; align-self:flex-start; padding:10px 18px; }
-              #contacts ::placeholder { color:#94a3b8; opacity:1; }
-              /* Alerts */
-              #contacts .contact-alert{ border-radius:12px; padding:12px 14px; margin:0 0 12px 0; font-weight:600; }
-              #contacts .contact-alert.ok{ background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0; }
-              #contacts .contact-alert.err{ background:#fef2f2; color:#991b1b; border:1px solid #fecaca; }
-              /* Responsive */
-              @media (max-width: 960px){
-                #contacts .contacts-grid{ grid-template-columns:1fr; }
-              }
-            </style>
           </div>
         </div>
       </section>
     </main>
+    @push('scripts')
+      <script>
+        document.querySelectorAll('[data-home-contact-form]').forEach(function(form){form.addEventListener('submit',function(event){if(!form.checkValidity()){event.preventDefault();form.reportValidity();return}var button=form.querySelector('button[type="submit"]');if(button){button.disabled=true;button.setAttribute('aria-disabled','true');var label=button.querySelector('span');if(label){label.textContent=button.getAttribute('data-label-loading')}}})});
+      </script>
+    @endpush
 </x-layouts.index>

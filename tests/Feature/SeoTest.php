@@ -209,6 +209,70 @@ class SeoTest extends TestCase
         $this->assertSame(4, substr_count($home->getContent(), 'class="nl-product-card"'));
     }
 
+    public function test_home_articles_use_the_premium_four_card_showcase(): void
+    {
+        foreach (range(1, 6) as $index) {
+            Article::create([
+                'title_uz' => "Maqola {$index}",
+                'title_ru' => "Статья {$index}",
+                'title_en' => "Article {$index}",
+                'description_uz' => 'Uzun maqola tavsifi kartadagi matn chegarasini tekshirish uchun.',
+                'description_ru' => 'Длинное описание статьи для проверки ограничения текста внутри карточки.',
+                'description_en' => 'A long article description used to verify card text clamping.',
+                'photo' => 'articles/example.jpg',
+            ]);
+        }
+
+        $response = $this->get('/uz')->assertOk()
+            ->assertSee('class="articles articles-home"', false)
+            ->assertSee('aria-labelledby="home-articles-title"', false)
+            ->assertSee('class="article-card__media"', false)
+            ->assertSee('class="article-card__body"', false)
+            ->assertDontSee('class="article-meta"', false);
+
+        $this->assertSame(4, substr_count($response->getContent(), 'class="article-card"'));
+        $this->assertSame(4, substr_count($response->getContent(), 'class="article-more"'));
+    }
+
+    public function test_catalog_home_contact_and_faq_use_the_premium_responsive_ui(): void
+    {
+        $catalog = $this->get('/uz/catalog');
+        $catalog->assertOk()
+            ->assertSee('class="content-page catalog-page"', false)
+            ->assertSee('class="container catalog-container"', false)
+            ->assertSee('class="nl-products-grid catalog-products-grid"', false);
+
+        $home = $this->get('/uz');
+        $home->assertOk()
+            ->assertSee('class="seo-faq__panel"', false)
+            ->assertSee('class="seo-faq__item"', false)
+            ->assertSee('class="seo-faq__icon" aria-hidden="true"', false)
+            ->assertSee('class="container home-contacts__container"', false)
+            ->assertSee('data-home-contact-form', false)
+            ->assertSee('name="form_context" value="general"', false)
+            ->assertSee('name="website"', false)
+            ->assertSee('name="name"', false)
+            ->assertSee('name="phone"', false)
+            ->assertSee('name="message"', false)
+            ->assertSee('type="submit"', false);
+
+        foreach (['ru', 'en'] as $locale) {
+            $this->get("/{$locale}")->assertOk()
+                ->assertSee('data-home-contact-form', false)
+                ->assertSee('class="seo-faq__panel"', false);
+        }
+
+        $siteCss = file_get_contents(public_path('css/site.css'));
+        $this->assertStringContainsString('.seo-faq__item[open]', $siteCss);
+        $this->assertStringContainsString('#contacts .contacts-grid', $siteCss);
+        $this->assertStringContainsString('@media(max-width:767px)', $siteCss);
+
+        $contentCss = file_get_contents(public_path('css/content-pages.css'));
+        $this->assertStringContainsString('.catalog-page .catalog-products-grid', $contentCss);
+        $this->assertStringContainsString('grid-template-columns:repeat(3,minmax(0,1fr))', $contentCss);
+        $this->assertStringContainsString('.catalog-page .nl-product-card__media', $contentCss);
+    }
+
     public function test_manufacturing_landing_is_localized_responsive_and_uses_verified_content(): void
     {
         Partner::create([

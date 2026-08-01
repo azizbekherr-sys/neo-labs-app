@@ -1,15 +1,23 @@
 @props(['items' => [], 'title' => null])
 @if(count($items))
-  <section class="seo-faq" aria-labelledby="faq-heading" style="padding:32px 0;">
-    <div class="container">
-      <h2 id="faq-heading" style="margin:0 0 18px;color:#18361d;">{{ $title ?: __('site.common.faq_title') }}</h2>
-      <div style="display:grid;gap:12px;">
+  <section class="seo-faq" aria-labelledby="faq-heading">
+    <div class="container seo-faq__container">
+      <div class="seo-faq__panel">
+        <header class="seo-faq__header">
+          <span class="seo-faq__eyebrow" aria-hidden="true">NEO-LABS</span>
+          <h2 id="faq-heading">{{ $title ?: __('site.common.faq_title') }}</h2>
+        </header>
+        <div class="seo-faq__list">
         @foreach($items as $item)
-          <details style="border:1px solid #dceedd;border-radius:14px;padding:14px 16px;background:#fff;">
-            <summary style="cursor:pointer;font-weight:700;color:#18361d;">{{ $item['question'] }}</summary>
-            <div style="padding-top:10px;line-height:1.7;color:#475569;">{!! nl2br(e($item['answer'])) !!}</div>
+          <details class="seo-faq__item">
+            <summary>
+              <span class="seo-faq__question">{{ $item['question'] }}</span>
+              <span class="seo-faq__icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="seo-faq__answer">{!! nl2br(e($item['answer'])) !!}</div>
           </details>
         @endforeach
+        </div>
       </div>
     </div>
   </section>

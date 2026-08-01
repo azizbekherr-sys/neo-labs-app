@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="{{ asset('css/content-pages.css') }}?v={{ filemtime(public_path('css/content-pages.css')) }}">
   @endpush
 
-  <main class="content-page">
+  <main class="content-page catalog-page">
     <section class="content-hero content-hero--catalog" aria-labelledby="catalog-title">
       <div class="container content-hero__inner">
         <p class="content-eyebrow">{{ __('content.catalog.eyebrow') }}</p>
@@ -23,8 +23,8 @@
       </div>
     </section>
 
-    <section class="content-section" aria-label="{{ __('content.catalog.title') }}">
-      <div class="container">
+    <section class="content-section catalog-section" aria-label="{{ __('content.catalog.title') }}">
+      <div class="container catalog-container">
         <form class="search-bar" method="GET" action="{{ route('catalog') }}" role="search">
           <div class="field-group">
             <label for="catalog-search">{{ __('content.catalog.search_label') }}</label>
@@ -36,7 +36,7 @@
           @endif
         </form>
 
-        <div class="nl-products-grid">
+        <div class="nl-products-grid catalog-products-grid">
           @forelse($products as $product)
             <x-product-card :product="$product" heading-level="h2" />
           @empty
