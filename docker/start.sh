@@ -10,7 +10,9 @@ cd /var/www/html
 # Env vars come from Render at runtime, so config cache is built at startup.
 # Package discovery and compiled views are already prepared in the image.
 php artisan config:cache || true
-php artisan migrate --force
+if [ "${RUN_MIGRATIONS:-false}" = "true" ]; then
+    php artisan migrate --force
+fi
 chmod -R 775 storage bootstrap/cache 2>/dev/null || true
 
 # php-fpm in background, nginx in foreground
