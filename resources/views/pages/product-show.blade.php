@@ -319,19 +319,6 @@
           new ResizeObserver(function(){
             document.documentElement.style.setProperty('--product-sticky-height',sticky.offsetHeight+'px');
           }).observe(sticky);
-          var reserveChatSpace=function(){
-            if(document.getElementById('jivo-iframe-container')){
-              document.documentElement.style.setProperty('--product-chat-reserve','52px');
-              return true;
-            }
-            return false;
-          };
-          if(!reserveChatSpace()){
-            var chatObserver=new MutationObserver(function(){
-              if(reserveChatSpace()) chatObserver.disconnect();
-            });
-            chatObserver.observe(document.body,{childList:true,subtree:true});
-          }
         }
       })();
     </script>

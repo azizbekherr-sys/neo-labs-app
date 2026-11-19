@@ -37,8 +37,8 @@
         </div>
 
         <div class="about-grid" style="display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:18px; margin-top:10px;">
-          <img src="{{ asset('img/about1.png') }}" alt="about-1" style="width:100%; height:100%; object-fit:cover; border-radius:18px; box-shadow:0 14px 34px rgba(17,94,50,.08);" />
-          <img src="{{ asset('img/about2.png') }}" alt="about-2" style="width:100%; height:100%; object-fit:cover; border-radius:18px; box-shadow:0 14px 34px rgba(17,94,50,.08);" />
+          <img src="{{ asset('img/about1.png') }}" alt="{{ __('Специалист в защитной одежде проверяет производственные резервуары') }}" width="1200" height="628" loading="lazy" decoding="async" style="width:100%; height:100%; object-fit:cover; border-radius:18px; box-shadow:0 14px 34px rgba(17,94,50,.08);" />
+          <img src="{{ asset('img/about2.png') }}" alt="{{ __('Сотрудник в защитном костюме контролирует производственное оборудование') }}" width="1080" height="675" loading="lazy" decoding="async" style="width:100%; height:100%; object-fit:cover; border-radius:18px; box-shadow:0 14px 34px rgba(17,94,50,.08);" />
         </div>
       </div>
       <style>
@@ -68,8 +68,8 @@
           </p>
         </div>
         <div class="about-grid" style="display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:18px; margin-top:10px;">
-          <img src="{{ asset('img/about3.png') }}" alt="about-3" style="width:100%; height:100%; object-fit:cover; border-radius:18px; box-shadow:0 14px 34px rgba(17,94,50,.08);" />
-          <img src="{{ asset('img/about4.png') }}" alt="about-4" style="width:100%; height:100%; object-fit:cover; border-radius:18px; box-shadow:0 14px 34px rgba(17,94,50,.08);" />
+          <img src="{{ asset('img/about3.png') }}" alt="{{ __('Лаборант проводит анализ в лаборатории контроля качества') }}" width="1090" height="628" loading="lazy" decoding="async" style="width:100%; height:100%; object-fit:cover; border-radius:18px; box-shadow:0 14px 34px rgba(17,94,50,.08);" />
+          <img src="{{ asset('img/about4.png') }}" alt="{{ __('Специалисты лаборатории работают с образцами') }}" width="1920" height="1274" loading="lazy" decoding="async" style="width:100%; height:100%; object-fit:cover; border-radius:18px; box-shadow:0 14px 34px rgba(17,94,50,.08);" />
         </div>
       </div>
       <style>
@@ -91,7 +91,7 @@
             </p>
           </div>
           <div style="display:flex; justify-content:center;">
-            <img src="{{ asset('img/about5.png') }}" alt="Kaizen" style="max-width:360px; width:100%; height:auto; border-radius:18px;" />
+            <img src="{{ asset('img/about5.png') }}" alt="{{ __('Кайдзен — система непрерывного улучшения') }}" width="447" height="557" loading="lazy" decoding="async" style="max-width:360px; width:100%; height:auto; border-radius:18px;" />
           </div>
         </div>
       </div>

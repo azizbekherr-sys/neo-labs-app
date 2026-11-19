@@ -131,14 +131,21 @@ class Seo
             ],
             'areaServed' => ['@type' => 'Country', 'name' => $address['country'][$locale] ?? 'Uzbekistan'],
             'sameAs' => config('seo.social_profiles', []),
-            'contactPoint' => [[
+            'contactPoint' => array_values(array_filter([[
                 '@type' => 'ContactPoint',
                 'telephone' => config('seo.phone'),
                 'email' => config('seo.email'),
                 'contactType' => 'customer service',
                 'areaServed' => 'UZ',
                 'availableLanguage' => ['uz', 'ru', 'en'],
-            ]],
+            ], config('seo.secondary_phone') ? [
+                // The second number is the one listed in public registries, so expose it too for NAP consistency.
+                '@type' => 'ContactPoint',
+                'telephone' => config('seo.secondary_phone'),
+                'contactType' => 'sales',
+                'areaServed' => 'UZ',
+                'availableLanguage' => ['uz', 'ru'],
+            ] : null])),
             'openingHoursSpecification' => config('seo.opening_hours.opens') && config('seo.opening_hours.closes') ? [[
                 '@type' => 'OpeningHoursSpecification',
                 'dayOfWeek' => config('seo.opening_hours.days', []),
