@@ -105,6 +105,7 @@ use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\AdminAnalyticsController;
 use App\Http\Controllers\AdminMailController;
+use App\Http\Controllers\AdminTelegramController;
 
 // Auth routes
 Route::middleware('guest')->group(function () {
@@ -177,6 +178,12 @@ Route::middleware(['auth', \App\Http\Middleware\AdminLocale::class])->group(func
     Route::delete('/dashboard/company-facts/{companyFact}', [CompanyFactController::class, 'destroy'])->name('dashboard.company-facts.destroy');
     Route::patch('/dashboard/contact-messages/{contactMessage}', [ContactMessageController::class, 'update'])->name('dashboard.contact-messages.update');
     Route::delete('/dashboard/contact-messages/{contactMessage}', [ContactMessageController::class, 'destroy'])->name('dashboard.contact-messages.destroy');
+
+    // Telegram notifications (forms + mailbox)
+    Route::get('/dashboard/telegram', [AdminTelegramController::class, 'index'])->name('dashboard.telegram.index');
+    Route::post('/dashboard/telegram', [AdminTelegramController::class, 'update'])->middleware('throttle:20,1')->name('dashboard.telegram.update');
+    Route::post('/dashboard/telegram/discover', [AdminTelegramController::class, 'discover'])->middleware('throttle:20,1')->name('dashboard.telegram.discover');
+    Route::post('/dashboard/telegram/test', [AdminTelegramController::class, 'test'])->middleware('throttle:10,1')->name('dashboard.telegram.test');
 
     // Company mailbox (info@neo-labs.uz): read and reply from the admin panel
     Route::get('/dashboard/mail', [AdminMailController::class, 'index'])->name('dashboard.mail.index');
