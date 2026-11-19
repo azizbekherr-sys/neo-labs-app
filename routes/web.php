@@ -104,6 +104,7 @@ use App\Http\Controllers\ContactMessageController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\AdminAnalyticsController;
+use App\Http\Controllers\AdminMailController;
 
 // Auth routes
 Route::middleware('guest')->group(function () {
@@ -176,6 +177,15 @@ Route::middleware(['auth', \App\Http\Middleware\AdminLocale::class])->group(func
     Route::delete('/dashboard/company-facts/{companyFact}', [CompanyFactController::class, 'destroy'])->name('dashboard.company-facts.destroy');
     Route::patch('/dashboard/contact-messages/{contactMessage}', [ContactMessageController::class, 'update'])->name('dashboard.contact-messages.update');
     Route::delete('/dashboard/contact-messages/{contactMessage}', [ContactMessageController::class, 'destroy'])->name('dashboard.contact-messages.destroy');
+
+    // Company mailbox (info@neo-labs.uz): read and reply from the admin panel
+    Route::get('/dashboard/mail', [AdminMailController::class, 'index'])->name('dashboard.mail.index');
+    Route::get('/dashboard/mail/compose', [AdminMailController::class, 'compose'])->name('dashboard.mail.compose');
+    Route::post('/dashboard/mail', [AdminMailController::class, 'store'])->middleware('throttle:20,1')->name('dashboard.mail.store');
+    Route::get('/dashboard/mail/{folder}/{uid}', [AdminMailController::class, 'show'])->where(['folder' => 'inbox|sent', 'uid' => '[0-9]+'])->name('dashboard.mail.show');
+    Route::get('/dashboard/mail/{folder}/{uid}/attachments/{part}', [AdminMailController::class, 'attachment'])->where(['folder' => 'inbox|sent', 'uid' => '[0-9]+', 'part' => '[0-9]+(\.[0-9]+)*'])->name('dashboard.mail.attachment');
+    Route::post('/dashboard/mail/inbox/{uid}/reply', [AdminMailController::class, 'reply'])->where('uid', '[0-9]+')->middleware('throttle:20,1')->name('dashboard.mail.reply');
+    Route::delete('/dashboard/mail/{folder}/{uid}', [AdminMailController::class, 'destroy'])->where(['folder' => 'inbox|sent', 'uid' => '[0-9]+'])->name('dashboard.mail.destroy');
 });
 
 // Locale switcher

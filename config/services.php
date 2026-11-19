@@ -69,4 +69,15 @@ return [
         'key' => env('PEXELS_API_KEY'),
     ],
 
+    // Company mailbox shown in the admin panel (Pochta). Read over IMAP,
+    // replies go out through the regular Laravel mailer (MAIL_* settings).
+    'mailbox' => [
+        'host' => env('MAILBOX_IMAP_HOST'),
+        'port' => (int) env('MAILBOX_IMAP_PORT', 993),
+        'flags' => env('MAILBOX_IMAP_FLAGS', '/imap/ssl'),
+        'username' => env('MAILBOX_USERNAME'),
+        'password' => env('MAILBOX_PASSWORD'),
+        'from_name' => env('MAILBOX_FROM_NAME', 'NEO-LABS'),
+    ],
+
 ];

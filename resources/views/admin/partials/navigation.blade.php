@@ -4,6 +4,15 @@
       'admin.nav.new_messages', 30,
       fn () => \App\Models\ContactMessage::query()->where('status', 'new')->count()
   );
+  // Unread count for the company mailbox; cached and fail-safe so an IMAP outage never breaks the panel.
+  $unreadMail = \Illuminate\Support\Facades\Cache::remember('admin.nav.unread_mail', 60, function () {
+      try {
+          $mailbox = app(\App\Services\MailboxService::class);
+          return $mailbox->configured() ? $mailbox->unreadCount() : 0;
+      } catch (\Throwable $e) {
+          return 0;
+      }
+  });
   $groups = [
     'Boshqaruv' => [
       ['route' => 'dashboard', 'pattern' => 'dashboard', 'icon' => 'grid-1x2', 'label' => 'Umumiy ko‘rinish'],
@@ -18,6 +27,7 @@
     ],
     'Aloqa' => [
       ['route' => 'dashboard.messages.index', 'pattern' => 'dashboard.messages.*', 'icon' => 'chat-left-dots', 'label' => 'Murojaatlar', 'badge' => $newMessages],
+      ['route' => 'dashboard.mail.index', 'pattern' => 'dashboard.mail.*', 'icon' => 'envelope', 'label' => 'Pochta', 'badge' => $unreadMail],
     ],
   ];
 @endphp

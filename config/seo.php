@@ -14,7 +14,7 @@ return [
     'founding_date' => '2020-06-25',
     'phone' => env('COMPANY_PHONE', '+998991018839'),
     'secondary_phone' => env('COMPANY_SECONDARY_PHONE', '+998974459639'),
-    'email' => env('COMPANY_EMAIL', 'neo_labs2019@mail.ru'),
+    'email' => env('COMPANY_EMAIL', 'info@neo-labs.uz'),
     'tax_id' => env('COMPANY_TAX_ID'),
     'employee_count' => env('COMPANY_EMPLOYEE_COUNT'),
     'opening_hours' => [

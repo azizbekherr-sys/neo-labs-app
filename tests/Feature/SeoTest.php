@@ -299,7 +299,7 @@ class SeoTest extends TestCase
                 ->assertSee('<h1 id="mfg-title">'.$heading.'</h1>', false)
                 ->assertSee($cta)
                 ->assertSee('href="tel:+998991018839"', false)
-                ->assertSee('href="mailto:neo_labs2019@mail.ru"', false)
+                ->assertSee('href="mailto:info@neo-labs.uz"', false)
                 ->assertSee('aria-current="page"', false)
                 ->assertSee('class="skip-link"', false)
                 ->assertSee('name="form_context" value="manufacturing"', false)
@@ -565,7 +565,7 @@ class SeoTest extends TestCase
                 ->assertSee($copy['address'])
                 ->assertSee($copy['map'])
                 ->assertSee('href="tel:+998991018839"', false)
-                ->assertSee('href="mailto:neo_labs2019@mail.ru"', false)
+                ->assertSee('href="mailto:info@neo-labs.uz"', false)
                 ->assertSee("/{$locale}/contacts#contacts-map", false)
                 ->assertSee('© '.now()->year)
                 ->assertDontSee('class="footer-grid"', false);
