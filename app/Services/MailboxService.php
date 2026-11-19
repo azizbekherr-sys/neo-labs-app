@@ -41,6 +41,41 @@ class MailboxService
         return (string) config('services.mailbox.from_name', 'NEO-LABS');
     }
 
+    /**
+     * UIDVALIDITY and all message UIDs in INBOX, used to detect newly arrived mail.
+     *
+     * @return array{validity: int, uids: array<int, int>}
+     */
+    public function inboxState(): array
+    {
+        $stream = $this->open('INBOX');
+        $status = @imap_status($stream, $this->ref() . 'INBOX', SA_UIDVALIDITY);
+        $uids = @imap_search($stream, 'ALL', SE_UID) ?: [];
+        imap_errors();
+
+        return [
+            'validity' => $status ? (int) $status->uidvalidity : 0,
+            'uids' => array_map('intval', $uids),
+        ];
+    }
+
+    /** Plain-text preview of a message returned by get(). */
+    public function snippet(array $message, int $limit = 700): string
+    {
+        $text = $message['text'] !== '' ? $message['text'] : $message['html'];
+        if ($message['text'] === '' && $text !== '') {
+            $text = (string) preg_replace('#<(script|style)[^>]*>.*?</\1>#is', '', $text);
+            $text = (string) preg_replace('#<(br|/p|/div|/tr|/li|/h[1-6])\b[^>]*>#i', "\n", $text);
+            $text = html_entity_decode(strip_tags($text), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        }
+
+        // Drop quoted history ("> ...") and collapse whitespace.
+        $lines = array_filter(preg_split('/\R/', $text) ?: [], fn ($line) => !preg_match('/^\s*>/', $line));
+        $text = trim((string) preg_replace("/[ \t]+/", ' ', (string) preg_replace("/\n{3,}/", "\n\n", implode("\n", $lines))));
+
+        return mb_strlen($text) > $limit ? rtrim(mb_substr($text, 0, $limit)) . '…' : $text;
+    }
+
     public function unreadCount(): int
     {
         $stream = $this->open('INBOX');

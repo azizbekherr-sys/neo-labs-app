@@ -15,7 +15,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        // Forward new mail in info@neo-labs.uz to Telegram (cron runs schedule:run every minute).
+        $schedule->command('mailbox:telegram')->everyMinute()->withoutOverlapping(10);
     }
 
     /**

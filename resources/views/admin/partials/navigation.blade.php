@@ -28,6 +28,7 @@
     'Aloqa' => [
       ['route' => 'dashboard.messages.index', 'pattern' => 'dashboard.messages.*', 'icon' => 'chat-left-dots', 'label' => 'Murojaatlar', 'badge' => $newMessages],
       ['route' => 'dashboard.mail.index', 'pattern' => 'dashboard.mail.*', 'icon' => 'envelope', 'label' => 'Pochta', 'badge' => $unreadMail],
+      ['route' => 'dashboard.telegram.index', 'pattern' => 'dashboard.telegram.*', 'icon' => 'telegram', 'label' => 'Telegram'],
     ],
   ];
 @endphp
