@@ -15,7 +15,15 @@ Languages: Uzbek (`/uz`), Russian (`/ru`) and English (`/en`).
 - Secondary phone: +998 97 445 96 39
 - Email: info@neo-labs.uz
 
-An exact street address, tax ID, employee count, leadership list and social profiles are intentionally omitted until they are entered and verified by the administrator.
+## Registration details (public registry data)
+
+- Legal form: limited liability company (Uzbek: mas'uliyati cheklangan jamiyat, MChJ; Russian: ООО)
+- Taxpayer ID (STIR/INN): 307508967
+- State registration date: 25 June 2020 (Public Services Centre of Uzbekistan)
+- Registered location: Sergeli (Sirg'ali) district, Tashkent, Uzbekistan
+- Sources: https://orginfo.uz/en/organization/a0da964e341d/ and https://www.goldenpages.uz/company/?Id=117768
+
+An exact street address, employee count, leadership list and social profiles are intentionally omitted until they are confirmed by the company.
 
 ## Published production formats
 
@@ -74,4 +82,4 @@ No certification status should be inferred from an empty page. Published records
 - Company facts (Russian): https://neo-labs.uz/ru/company-facts
 - Company facts (English): https://neo-labs.uz/en/company-facts
 
-Last reviewed: 2026-07-29
+Last reviewed: 2026-11-19

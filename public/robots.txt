@@ -1,5 +1,5 @@
 # Googlebot, Bingbot, OAI-SearchBot and PerplexityBot are covered by this group.
-# Crawler access reviewed on 2026-07-29.
+# Crawler access reviewed on 2026-11-19.
 User-agent: *
 Allow: /
 Disallow: /admin

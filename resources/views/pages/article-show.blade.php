@@ -28,7 +28,10 @@
     'dateModified' => optional($article->updated_at)->toAtomString(),
     'inLanguage' => $locale . '-UZ',
     'mainEntityOfPage' => ['@type' => 'WebPage', '@id' => $canonical],
-    'author' => $article->author_name ? ['@type' => 'Person', 'name' => $article->author_name, 'jobTitle' => $authorRole, 'url' => $authorUrl] : null,
+    // Without a named author the article is credited to the company editorial team (Organization), never to an invented person.
+    'author' => $article->author_name
+        ? ['@type' => 'Person', 'name' => $article->author_name, 'jobTitle' => $authorRole, 'url' => $authorUrl]
+        : ['@type' => 'Organization', '@id' => \App\Support\Seo::baseUrl() . '/#organization', 'name' => __('content.article.editorial_team'), 'url' => \App\Support\Seo::baseUrl() . '/' . $locale . '/editorial-policy'],
     'reviewedBy' => ($article->reviewer_name && $article->reviewed_at) ? ['@type' => 'Person', 'name' => $article->reviewer_name, 'jobTitle' => $reviewerRole] : null,
     'publisher' => ['@id' => \App\Support\Seo::baseUrl() . '/#organization'],
     'description' => \App\Support\Content::localized($article, 'schema_description', $locale) ?: $metaDescription,
@@ -73,6 +76,8 @@
             @endif
             @if($article->author_name)
               <div><dt>{{ __('content.article.author') }}</dt><dd>@if($authorUrl)<a href="{{ $authorUrl }}">{{ $article->author_name }}</a>@else{{ $article->author_name }}@endif @if($authorRole)<span>— {{ $authorRole }}</span>@endif</dd></div>
+            @else
+              <div><dt>{{ __('content.article.author') }}</dt><dd><a href="{{ url('/' . $locale . '/editorial-policy') }}">{{ __('content.article.editorial_team') }}</a></dd></div>
             @endif
             @if($article->reviewer_name && $article->reviewed_at)
               <div><dt>{{ __('content.article.reviewer') }}</dt><dd>{{ $article->reviewer_name }} @if($reviewerRole)<span>— {{ $reviewerRole }}</span>@endif</dd></div>

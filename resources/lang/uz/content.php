@@ -71,6 +71,7 @@ return [
         'views' => 'Ko‘rishlar',
         'author' => 'Muallif',
         'reviewer' => 'Tibbiy tekshiruvchi',
+        'editorial_team' => 'NEO-LABS tahririyati',
         'references' => 'Manbalar',
         'archive' => ':year-yil arxiv materiali',
         'notice' => 'Ushbu material umumiy ma’lumot uchun. U shifokor maslahati, tashxis yoki davolash o‘rnini bosmaydi.',

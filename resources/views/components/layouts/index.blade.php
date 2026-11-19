@@ -386,35 +386,6 @@
           setTimeout(function(){ toast.classList.add('show'); }, 120);
           setTimeout(function(){ toast.classList.remove('show'); }, 3800);
         }
-        // Jivo adds several third-party JS/CSS/audio requests. Start it only
-        // after the page has settled so it cannot compete with critical assets.
-        var loadJivo = function () {
-          if (document.querySelector('script[data-jivo-widget]')) return;
-          var jivo = document.createElement('script');
-          jivo.src = 'https://code.jivosite.com/widget/2KdGV1dr1B';
-          jivo.async = true;
-          jivo.dataset.jivoWidget = 'true';
-          document.body.appendChild(jivo);
-
-          var reserveFooterSpace = function () {
-            if (!document.getElementById('jivo-iframe-container')) return false;
-            document.documentElement.style.setProperty('--site-chat-reserve', '52px');
-            return true;
-          };
-          if (!reserveFooterSpace()) {
-            var footerChatObserver = new MutationObserver(function () {
-              if (reserveFooterSpace()) footerChatObserver.disconnect();
-            });
-            footerChatObserver.observe(document.body, {childList: true, subtree: true});
-          }
-        };
-        setTimeout(function () {
-          if ('requestIdleCallback' in window) {
-            window.requestIdleCallback(loadJivo, {timeout: 2500});
-          } else {
-            loadJivo();
-          }
-        }, 6000);
       });
       // Mobile menu toggle
       (function () {

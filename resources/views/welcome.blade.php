@@ -174,28 +174,28 @@
             </style>
             <div class="mf-grid">
               <div class="mf-item">
-                <div class="mf-icon"><img src="{{ asset('img/de1.png') }}" alt="tablets"></div>
+                <div class="mf-icon"><img src="{{ asset('img/de1.png') }}" alt="" width="151" height="151" loading="lazy" decoding="async"></div>
                 <div class="mf-text">
                   <div class="mf-num">100 <span>{{ __('млн') }}</span></div>
                   <div class="mf-label">{{ __('Таблетки') }}</div>
                 </div>
               </div>
               <div class="mf-item">
-                <div class="mf-icon"><img src="{{ asset('img/de4.png') }}" alt="capsules"></div>
+                <div class="mf-icon"><img src="{{ asset('img/de4.png') }}" alt="" width="151" height="151" loading="lazy" decoding="async"></div>
                 <div class="mf-text">
                   <div class="mf-num">65 <span>{{ __('млн') }}</span></div>
                   <div class="mf-label">{{ __('Капсулы') }}</div>
                 </div>
               </div>
               <div class="mf-item">
-                <div class="mf-icon"><img src="{{ asset('img/de3.png') }}" alt="vials"></div>
+                <div class="mf-icon"><img src="{{ asset('img/de3.png') }}" alt="" width="151" height="151" loading="lazy" decoding="async"></div>
                 <div class="mf-text">
                   <div class="mf-num">30 <span>{{ __('млн') }}</span></div>
                   <div class="mf-label">{{ __('Флаконы') }}</div>
                 </div>
               </div>
               <div class="mf-item">
-                <div class="mf-icon"><img src="{{ asset('img/de2.png') }}" alt="packs"></div>
+                <div class="mf-icon"><img src="{{ asset('img/de2.png') }}" alt="" width="151" height="151" loading="lazy" decoding="async"></div>
                 <div class="mf-text">
                   <div class="mf-num">4,5 <span>{{ __('млн') }}</span></div>
                   <div class="mf-label">{{ __('Пакеты') }}</div>
@@ -255,19 +255,19 @@
           </style>
           <div class="card-row">
             <div class="treatment-card">
-              <img src="img/pre1.png" alt="{{ __('Почки и мочевыводящие пути') }}" />
+              <img src="{{ asset('img/pre1.png') }}" alt="{{ __('Почки и мочевыводящие пути') }}" width="411" height="303" loading="lazy" decoding="async" />
               <span>{{ __('Почки и мочевыводящие пути') }}</span>
             </div>
             <div class="treatment-card">
-              <img src="img/pre2.png" alt="{{ __('Головной мозг') }}" />
+              <img src="{{ asset('img/pre2.png') }}" alt="{{ __('Головной мозг') }}" width="411" height="303" loading="lazy" decoding="async" />
               <span>{{ __('Головной мозг') }}</span>
             </div>
             <div class="treatment-card">
-              <img src="img/pre3.png" alt="{{ __('Дефицит железа') }}" />
+              <img src="{{ asset('img/pre3.png') }}" alt="{{ __('Дефицит железа') }}" width="411" height="303" loading="lazy" decoding="async" />
               <span>{{ __('Дефицит железа') }}</span>
             </div>
             <div class="treatment-card">
-              <img src="img/pre5.png" alt="{{ __('Желудок') }}" />
+              <img src="{{ asset('img/pre5.png') }}" alt="{{ __('Желудок') }}" width="1920" height="1080" loading="lazy" decoding="async" />
               <span>{{ __('Желудок') }}</span>
             </div>
           </div>

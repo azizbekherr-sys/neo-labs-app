@@ -71,6 +71,7 @@ return [
         'views' => 'Views',
         'author' => 'Author',
         'reviewer' => 'Medical reviewer',
+        'editorial_team' => 'NEO-LABS editorial team',
         'references' => 'References',
         'archive' => ':year archive article',
         'notice' => 'This material is for general information only and does not replace medical advice, diagnosis or treatment.',
