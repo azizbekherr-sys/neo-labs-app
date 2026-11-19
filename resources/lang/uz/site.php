@@ -21,7 +21,7 @@ return [
             ['question'=>'NEO-LABS nimalar ishlab chiqaradi?','answer'=>'NEO-LABS tabletka, kapsula, flakon va sache shaklidagi biologik faol qo‘shimchalarni ishlab chiqaradi.'],
             ['question'=>'NEO-LABS kontrakt ishlab chiqarish xizmatini ko‘rsatadimi?','answer'=>'Ha. Kompaniya mahsulot formatini muhokama qilishdan qadoqlashgacha bo‘lgan kontrakt ishlab chiqarish so‘rovlarini qabul qiladi.'],
             ['question'=>'NEO-LABS mahsulotlari qayerda ishlab chiqariladi?','answer'=>'Saytda e’lon qilingan ma’lumotga ko‘ra, ishlab chiqarish O‘zbekiston, Toshkent shahri, Sergeli tumanida joylashgan.'],
-            ['question'=>'Kompaniya bilan qanday bog‘lanish mumkin?','answer'=>'Telefon: +998 99 101 88 39. Email: neo_labs2019@mail.ru. Saytdagi aloqa shaklidan ham foydalanish mumkin.'],
+            ['question'=>'Kompaniya bilan qanday bog‘lanish mumkin?','answer'=>'Telefon: +998 99 101 88 39. Email: info@neo-labs.uz. Saytdagi aloqa shaklidan ham foydalanish mumkin.'],
         ],
     ],
     'about'=>[

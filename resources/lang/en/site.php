@@ -36,7 +36,7 @@ return [
             ['question' => 'What does NEO-LABS manufacture?', 'answer' => 'NEO-LABS manufactures dietary supplements in tablet, capsule, bottle and sachet formats.'],
             ['question' => 'Does NEO-LABS provide contract manufacturing?', 'answer' => 'Yes. The company accepts contract manufacturing requests, from agreeing the product format through to packaging.'],
             ['question' => 'Where are NEO-LABS products manufactured?', 'answer' => 'According to published information, the production facility is in the Sergeli district of Tashkent, Uzbekistan.'],
-            ['question' => 'How can I contact the company?', 'answer' => 'Phone: +998 99 101 88 39. Email: neo_labs2019@mail.ru. You can also use the contact form on the website.'],
+            ['question' => 'How can I contact the company?', 'answer' => 'Phone: +998 99 101 88 39. Email: info@neo-labs.uz. You can also use the contact form on the website.'],
         ],
     ],
     'about' => [

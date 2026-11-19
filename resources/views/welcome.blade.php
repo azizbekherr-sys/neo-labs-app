@@ -364,7 +364,7 @@
                   </div>
                   <div class="contact-row">
                     <span class="ci" aria-hidden="true">✉</span>
-                    <a href="mailto:neo_labs2019@mail.ru" class="contact-link">neo_labs2019@mail.ru</a>
+                    <a href="mailto:info@neo-labs.uz" class="contact-link">info@neo-labs.uz</a>
                   </div>
                   <div class="contact-cta">
                     <a class="btn contact-map" href="{{ route('contacts') }}#contacts-map">{{ __('Посмотреть на карте') }}</a>

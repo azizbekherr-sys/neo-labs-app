@@ -268,9 +268,9 @@
                 <span aria-hidden="true">☎</span>
                 <span><small>{{ __('manufacturing.cta.phone_label') }}</small><br>+998 99 101 88 39</span>
               </a>
-              <a class="mfg-cta__contact" data-analytics="email_click" href="mailto:neo_labs2019@mail.ru">
+              <a class="mfg-cta__contact" data-analytics="email_click" href="mailto:info@neo-labs.uz">
                 <span aria-hidden="true">✉</span>
-                <span><small>{{ __('manufacturing.cta.email_label') }}</small><br>neo_labs2019@mail.ru</span>
+                <span><small>{{ __('manufacturing.cta.email_label') }}</small><br>info@neo-labs.uz</span>
               </a>
             </div>
           </div>
