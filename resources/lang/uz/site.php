@@ -63,7 +63,7 @@ return [
         'contact_text'=>'Savollar yoki ma’lumotlar bo‘yicha murojaatlar uchun email:',
         'updated'=>'So‘nggi yangilanish: 29-iyul, 2026-yil.',
     ],
-    'contacts'=>['title'=>'NEO-LABS bilan bog‘lanish','description'=>'NEO-LABS telefonlari, email, Toshkentdagi joylashuvi va kontrakt ishlab chiqarish uchun aloqa shakli.','success'=>'Xabaringiz yuborildi! Tez orada bog‘lanamiz.','error'=>'Xabar yuborilmadi. Keyinroq urinib ko‘ring.','not_configured'=>'Xabar yuborish xizmati sozlanmagan.'],
+    'contacts'=>['title'=>'NEO-LABS bilan bog‘lanish','description'=>'NEO-LABS telefonlari, email, Toshkentdagi joylashuvi va kontrakt ishlab chiqarish uchun aloqa shakli.','success'=>'Xabaringiz yuborildi! Tez orada bog‘lanamiz.','error'=>'Xabar yuborilmadi. Keyinroq urinib ko‘ring.','too_many'=>'Juda ko‘p urinish bo‘ldi. Bir daqiqadan so‘ng qayta yuboring — yozganingiz saqlanib qoldi.','not_configured'=>'Xabar yuborish xizmati sozlanmagan.'],
     'manufacturing'=>[
         'title'=>'Kontrakt ishlab chiqarish xizmatlari','description'=>'NEO-LABS tabletka, kapsula, flakon va sache uchun to‘liq sikldagi kontrakt ishlab chiqarish hamda qadoqlash xizmatlari.','country'=>'O‘zbekiston','service_type'=>'Biologik faol qo‘shimchalarni kontrakt ishlab chiqarish',
         'faq'=>[

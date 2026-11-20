@@ -116,6 +116,7 @@ return [
         'description' => 'NEO-LABS phone numbers, email, Tashkent location and contact form for contract manufacturing inquiries.',
         'success' => 'Your message has been sent. We will contact you shortly.',
         'error' => 'The message could not be sent. Please try again later.',
+        'too_many' => 'Too many attempts. Please send the message again in a minute — your text has been kept.',
         'not_configured' => 'The messaging service is not configured.',
     ],
     'manufacturing' => [
