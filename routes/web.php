@@ -126,6 +126,10 @@ Route::get('/admin', function () {
 Route::post('/contact/send', [ContactController::class, 'send'])
     ->middleware('throttle:6,1')
     ->name('contact.send');
+// Reloading the page after a submit (or opening the URL directly) must not end on "405 Method Not Allowed".
+Route::get('/contact/send', function () {
+    return redirect()->to('/' . app()->getLocale() . '/contacts');
+});
 
 Route::post('/analytics/collect', [AnalyticsController::class, 'collect'])
     ->middleware('throttle:180,1')
