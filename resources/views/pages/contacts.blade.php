@@ -14,7 +14,7 @@
         <div class="contact-details">
           <h2>{{ __('Свяжитесь с нами') }}</h2>
           <address>
-            <div class="contact-item"><strong>{{ __('Позвоните нам') }}</strong><span>{{ __('content.contact.primary_phone') }}</span><a data-analytics="phone_click" href="tel:+998991018839">+998 99 101 88 39</a><span>{{ __('content.contact.additional_phone') }}</span><a data-analytics="phone_click" href="tel:+998974459639">+998 97 445 96 39</a></div>
+            <div class="contact-item"><strong>{{ __('Позвоните нам') }}</strong><span>{{ __('content.contact.primary_phone') }}</span><a data-analytics="phone_click" href="tel:+998991018839">+998 99 101 88 39</a><span>{{ __('content.contact.additional_phone') }}</span><a data-analytics="phone_click" href="tel:+998956364044">+998 95 636 40 44</a></div>
             <div class="contact-item"><strong>Email</strong><a data-analytics="email_click" href="mailto:info@neo-labs.uz">info@neo-labs.uz</a></div>
             <div class="contact-item"><strong>{{ __('Наш адрес') }}</strong><span>{{ __('Узбекистан, город Ташкент, Сергели район') }}</span></div>
             <div class="contact-item"><strong>{{ __('Время работы') }}</strong><span>{{ __('с 09:00 до 18:00, Пн-Сб') }}</span></div>
